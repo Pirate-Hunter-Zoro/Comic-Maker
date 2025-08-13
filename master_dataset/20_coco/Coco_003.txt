@@ -1,0 +1,1 @@
+coco_character, coco_rwby_character, auburn_hair, brown_eyes, sunglasses, orange_sweater, brown_jacket,  gold_jewelry,  holding_mugs,  mug_with_crown, mug_with_text

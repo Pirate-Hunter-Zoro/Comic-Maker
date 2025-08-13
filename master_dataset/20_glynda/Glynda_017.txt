@@ -1,0 +1,1 @@
+glynda_character, glynda_rwby_character,blond_hair,purple_eyes,purple_cloak,white_shirt,dark_pants,cane,magic_circle,grim_reaper_weapon

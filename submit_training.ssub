@@ -1,0 +1,35 @@
+#!/bin/bash
+#SBATCH --partition=c3_accel
+#SBATCH --job-name=lora_training
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=48000
+#SBATCH --gpus=1
+#SBATCH --time=7-00:00:00
+#SBATCH --output=~/Lora-Trainer/logs/training-%J.stdout
+#SBATCH --error=~/Lora-Trainer/logs/training-%J.stderr
+#SBATCH --mail-user=mferguson@laureateinstitute.org
+#SBATCH --mail-type=ALL
+
+# --- The Ritual Begins ---
+echo "Hmph. The forging of a new spirit begins on $(hostname)."
+echo "Job ID: ${SLURM_JOB_ID}"
+# Create the log directory if it doesn't exist. A trivial foresight.
+mkdir -p ~/Lora-Trainer/logs
+
+# Load the necessary powers from the system.
+module load Python/3.11.5-GCCcore-13.2.0
+module load CUDA/12.3.0
+
+# Enter your sanctuary.
+source ~/Lora-Trainer/lora_env/bin/activate
+
+# Navigate to the root of your domain.
+cd ~/Lora-Trainer
+
+# Unleash the training incantation.
+echo "Executing train_lora.py..."
+python3 scripts/train_lora.py
+
+echo "The forging is complete."

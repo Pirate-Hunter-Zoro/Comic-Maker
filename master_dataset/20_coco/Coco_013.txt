@@ -1,0 +1,1 @@
+coco_character, coco_rwby_character,brown hair,brown eyes,tan skin,brown coat,black beret,large minigun weapon,military-style clothing

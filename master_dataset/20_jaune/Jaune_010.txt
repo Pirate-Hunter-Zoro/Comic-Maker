@@ -1,0 +1,1 @@
+jaune_character, jaune_rwby_character,blond_hair,blue_eyes,gold_armor,black_turtleneck,sword,human

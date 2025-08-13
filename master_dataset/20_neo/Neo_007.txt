@@ -1,0 +1,1 @@
+neo_character, neo_rwby_character,pink_hair,black_hair,green_eyes,black_jacket,white_corset,top_hat,gloves,scarf

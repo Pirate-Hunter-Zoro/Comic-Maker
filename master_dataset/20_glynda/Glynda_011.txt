@@ -1,0 +1,1 @@
+glynda_character, glynda_rwby_character,blonde_hair,green_eyes,white_shirt,purple_cape,glasses,serious_expression

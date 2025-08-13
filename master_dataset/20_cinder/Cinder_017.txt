@@ -1,0 +1,1 @@
+cinder_character, cinder_rwby_character,black_hair,red_eyes,black_clothing,black_cape,high_heels,thigh_high_boots,short_skirt,curved_blade_weapon,arm_guards

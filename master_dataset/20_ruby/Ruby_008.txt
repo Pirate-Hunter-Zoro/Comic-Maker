@@ -1,0 +1,1 @@
+ruby_character, ruby_rwby_character,red_hair,black_eyes,red_cape,black_dress,red_boots,high_heeled_boots,crescent_rose,scythe,long_sleeves

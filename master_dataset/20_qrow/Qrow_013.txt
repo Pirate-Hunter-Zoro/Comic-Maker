@@ -1,0 +1,1 @@
+qrow_character, qrow_rwby_character,dark_brown_hair,red_eyes,goatee,red_vest,black_jacket,large_sword,leather_straps

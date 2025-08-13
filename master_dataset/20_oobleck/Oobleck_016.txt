@@ -1,0 +1,1 @@
+oobleck_character, oobleck_rwby_character,green_coat,black_pants,black_shoes,light_green_hair,round_glasses,black_cap,yellow_tie,holding_a_weapon

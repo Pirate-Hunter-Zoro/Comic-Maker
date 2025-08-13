@@ -1,0 +1,1 @@
+blake_character, blake_rwby_character,black_hair,red_eyes,cat_ears,black_clothing,long_coat,high_boots,arm_bands,crop_top,leggings

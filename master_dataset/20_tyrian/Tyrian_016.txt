@@ -1,0 +1,1 @@
+tyrian_character, tyrian_rwby_character,dark_red_hair,purple_eyes,pale_skin,faunus_features,dark_clothing,sleeveless_shirt,wrist_wraps,dark_pants,no_visible_weapon

@@ -1,0 +1,1 @@
+ghira_character, ghira_rwby_character,brown_hair,brown_eyes,beard,mustache,muscular,purple_robe,fur_collar,grey_armor,faunus_cat_features

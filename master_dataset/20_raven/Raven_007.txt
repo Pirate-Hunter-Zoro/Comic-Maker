@@ -1,0 +1,1 @@
+raven_character, raven_rwby_character,long_dark_grey_hair,red_eyes,red_jacket,black_gloves,long_sleeves,anime_style,city_background

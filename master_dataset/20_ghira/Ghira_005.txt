@@ -1,0 +1,1 @@
+ghira_character, ghira_rwby_character,black_hair,brown_eyes,purple_robe,beige_pants,black_boots,white_fur_trim,gray_armor,muscular_build

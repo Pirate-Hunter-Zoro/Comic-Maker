@@ -1,0 +1,1 @@
+coco_character, coco_rwby_character,brown hair,brown eyes,brown vest,black pants,gold minigun,newsboy cap,sunglasses,gold chain

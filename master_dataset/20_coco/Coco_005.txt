@@ -1,0 +1,1 @@
+coco_character, coco_rwby_character,brown hair,brown eyes,beret,brown jacket,black pants,belt,high boots,gun,ammunition belt

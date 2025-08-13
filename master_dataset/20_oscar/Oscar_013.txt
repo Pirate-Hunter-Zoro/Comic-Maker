@@ -1,0 +1,1 @@
+oscar_character, oscar_rwby_character,black_hair,brown_eyes,white_shirt,brown_pants,suspenders,orange_gloves,staff,no_faunus_features

@@ -1,0 +1,1 @@
+qrow_character, qrow_rwby_character,dark_hair,grey_eyes,white_jacket,black_shirt,grey_vest,necklace,no_weapon_visible
