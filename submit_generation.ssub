@@ -7,9 +7,8 @@
 #SBATCH --mem=32000
 #SBATCH --gpus=1
 #SBATCH --time=7-00:00:00
-#SBATCH --output=~/Lora-Trainer/logs/inference-%J.stdout
-#SBATCH --error=~/Lora-Trainer/logs/inference-%J.stderr
-#SBATCH --mail-user=mferguson@laureateinstitute.org
+#SBATCH --output=logs/inference-%J.stdout
+#SBATCH --error=logs/inference-%J.stderr
 #SBATCH --mail-type=ALL
 
 # --- The Command is Given ---
