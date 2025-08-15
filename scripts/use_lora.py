@@ -12,7 +12,7 @@ from controlnet_aux import OpenposeDetector
 
 # --- Static Definitions ---
 # *** YOU MUST CHANGE THIS PLACEHOLDER ***
-LAB_STORAGE_ROOT = Path("/media/labs/mferguson/Lora-Trainer")
+LAB_STORAGE_ROOT = Path("/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer")
 
 # The root of your scripts remains in your home directory.
 project_root = Path(__file__).parent.parent
