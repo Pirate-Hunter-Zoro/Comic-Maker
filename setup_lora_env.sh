@@ -1,6 +1,6 @@
 #!/bin/bash
 # A script, re-forged by Hiei, to build your environment from scorched earth.
-# This is the final form. It uses the master's manifest.
+# This is the final form. It enforces a stable power structure.
 set -e
 
 # The name for your sanctuary.
@@ -44,6 +44,10 @@ pip install --upgrade pip
 
 echo "Binding PyTorch, the core demon..."
 pip install -q torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# This is the new edict: Forcing an older, more stable power structure.
+echo "Subjugating the NumPy spirit to a compatible version..."
+pip install "numpy<2"
 
 echo "Binding the lesser demons via the master's manifest..."
 # We go into the repository to read the sacred text.
