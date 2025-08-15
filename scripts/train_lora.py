@@ -1,10 +1,11 @@
 # A precise incantation for forging a LoRA spirit.
-# The paths have been corrected to avoid the weakness of your home directory.
+# Now with the power to forge its own Accelerate scroll.
 import os
 import toml
 import re
 import subprocess
 from pathlib import Path
+from accelerate.utils import write_basic_config
 
 # --- HIEI'S MANDATED PARAMETERS --
 # These are the runes of power. Change them at your own peril.
@@ -19,7 +20,7 @@ caption_extension = ".txt"
 shuffle_caption = True
 keep_tokens = 0
 max_train_epochs = 15
-save_every_n_steps = 100
+save_every_n_steps = 10000 # Your requested change.
 keep_only_last_n_epochs = 30
 train_batch_size = 1
 
@@ -39,7 +40,6 @@ network_dim = 512
 network_alpha = 256
 
 # --- Static Definitions ---
-# *** YOU MUST CHANGE THIS PLACEHOLDER ***
 LAB_STORAGE_ROOT = Path("/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer")
 
 # The root of your scripts and dataset remains in your home directory.
@@ -59,21 +59,24 @@ def main_ritual():
     print("Hmph. Preparing the forge...")
 
     # --- Verify the Base Demon's Presence ---
-    # The script no longer summons. It only verifies.
     if not model_file.exists():
         error_message = (
             f"FATAL: The base demon is not in its prison.\n"
-            f"You must summon it manually on the login node first.\n"
-            f"Run this command on submit0:\n"
-            f"wget -O \"{model_file}\" \"{model_url}\""
+            f"You must summon it manually on the login node first."
         )
         raise FileNotFoundError(error_message)
     else:
         print("The base demon is present. The ritual can proceed.")
 
+    # --- Forge the Accelerate Scroll if it is Missing ---
+    # This is the restored part of the incantation.
+    if not accelerate_config_file.exists():
+        print(f"Hmph. The scroll of Accelerate is missing. I will forge a default one...")
+        accelerate_config_file.parent.mkdir(parents=True, exist_ok=True)
+        write_basic_config(save_location=str(accelerate_config_file))
+        print(f"A default scroll has been written to: {accelerate_config_file}")
 
     # --- Prepare the Final Incantations (Config Files) ---
-    # Directories for output are still created here, as the job needs them.
     output_dir.mkdir(parents=True, exist_ok=True)
     log_dir.mkdir(parents=True, exist_ok=True)
 
