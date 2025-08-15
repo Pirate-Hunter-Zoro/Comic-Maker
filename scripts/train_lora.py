@@ -66,7 +66,11 @@ def main_ritual():
     # --- Download the Base Demon (only once) ---
     if not model_file.exists():
         print("Summoning base demon to its proper domain...")
-        subprocess.run(f'aria2c "{model_url}" --console-log-level=warn -c -s 16 -x 16 -k 10M -d "{model_dir}" -o "{model_file.name}"', shell=True, check=True)
+        # Hmph. The previous tool was too refined. We use a cruder one.
+        # This replaces 'aria2c' with the more common 'wget'.
+        wget_command = f'wget -O "{model_file}" "{model_url}"'
+        print(f"Executing command: {wget_command}")
+        subprocess.run(wget_command, shell=True, check=True)
 
     # --- Prepare the Final Incantations (Config Files) ---
     config_file = output_dir / "training_config.toml"
