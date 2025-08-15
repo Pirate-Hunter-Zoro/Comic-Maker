@@ -1,6 +1,6 @@
 #!/bin/bash
 # A script, re-forged by Hiei, to build your environment from scorched earth.
-# It is unforgiving. It will first destroy, then create.
+# Now with all necessary spirits.
 set -e
 
 # The name for your sanctuary.
@@ -45,7 +45,8 @@ echo "Binding PyTorch, the core demon..."
 pip install -q torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
 echo "Binding the lesser demons of diffusion and control..."
-pip install -q diffusers==0.25.0 transformers==4.36.2 accelerate==0.25.0 peft==0.7.1 controlnet_aux==0.0.7 opencv-python-headless pillow huggingface_hub==0.20.1 bitsandbytes toml
+# The 'imagesize' spirit has been added to the summoning list.
+pip install -q diffusers==0.25.0 transformers==4.36.2 accelerate==0.25.0 peft==0.7.1 controlnet_aux==0.0.7 opencv-python-headless pillow huggingface_hub==0.20.1 bitsandbytes toml imagesize
 
 echo "All tools have been bound to your will."
 deactivate
