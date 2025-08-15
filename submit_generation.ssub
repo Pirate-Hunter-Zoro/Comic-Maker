@@ -9,7 +9,6 @@
 #SBATCH --time=7-00:00:00
 #SBATCH --output=logs/inference-%J.stdout
 #SBATCH --error=logs/inference-%J.stderr
-#SBATCH --mail-type=ALL
 
 # --- The Command is Given ---
 echo "A vision is being commanded on $(hostname)."

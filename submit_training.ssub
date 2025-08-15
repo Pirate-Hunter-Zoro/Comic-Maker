@@ -9,7 +9,6 @@
 #SBATCH --time=7-00:00:00
 #SBATCH --output=logs/training-%J.stdout
 #SBATCH --error=logs/training-%J.stderr
-#SBATCH --mail-type=ALL
 
 # --- The Ritual Begins ---
 echo "Hmph. The forging of a new spirit begins on $(hostname)."
