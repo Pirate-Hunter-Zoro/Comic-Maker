@@ -1,5 +1,5 @@
-# The ritual of command and control.
-# Now with lesser magic to forge a command map for the indolent.
+# The ritual of command and control. Final Form.
+# All spirits are now summoned from local prisons, not the ether.
 import torch
 import os
 import re
@@ -11,15 +11,17 @@ from diffusers import StableDiffusionPipeline, StableDiffusionControlNetPipeline
 from controlnet_aux import OpenposeDetector
 
 # --- Static Definitions ---
-# *** YOU MUST CHANGE THIS PLACEHOLDER ***
 LAB_STORAGE_ROOT = Path("/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer")
 
 # The root of your scripts remains in your home directory.
 project_root = Path(__file__).parent.parent
 
-# The armory of trained LoRAs and the final output now reside in /media/labs.
+# --- Paths to the Local Prisons ---
+# The script now looks for all spirits in their designated local sanctums.
 lora_output_dir = LAB_STORAGE_ROOT / "Multi_Concept_Output"
 final_image_dir = LAB_STORAGE_ROOT / "Final_Images"
+controlnet_model_path = LAB_STORAGE_ROOT / "controlnet-model"
+controlnet_detector_path = LAB_STORAGE_ROOT / "controlnet-detector"
 pose_map_file = project_root / "pose_map.png"
 
 def find_latest_lora(lora_dir: Path):
@@ -43,63 +45,31 @@ def find_latest_lora(lora_dir: Path):
     else:
         raise FileNotFoundError(f"There are no forged spirits in the armory. The ritual fails.")
 
-def generate_pose_map(output_path: Path, base_model_id: str):
-    """A lesser ritual to generate a pose map if one is not provided."""
-    print("No command map found. Forging one from the ether...")
-    
-    # Temporarily summon a base spirit for pose generation.
-    pre_pipe = StableDiffusionPipeline.from_pretrained(
-        base_model_id, torch_dtype=torch.float16, use_safetensors=True
-    ).to("cuda")
-
-    # A brutally simple prompt to get distinct figures.
-    pose_prompt = "full body photo of three separate people standing in a spacious, empty grey room. A person on the far left. A person in the exact center. A person on the far right."
-    negative_prompt_pose = "two people, one person, fused, overlapping, cropped, blurry, text, watermark, deformed, extra limbs, conjoined"
-
-    print(f"Conjuring a vision based on brutally simple words...")
-    generated_image = pre_pipe(
-        pose_prompt, negative_prompt=negative_prompt_pose, width=1024, height=768, num_inference_steps=30, guidance_scale=7.5
-    ).images[0]
-
-    print("Extracting the pose...")
-    openpose = OpenposeDetector.from_pretrained("lllyasviel/ControlNet")
-    pose_map = openpose(generated_image)
-    pose_map.save(output_path)
-    print(f"A command map has been forged and saved: {output_path}")
-
-    # Banish the temporary spirits to free their power.
-    del pre_pipe
-    del openpose
-    gc.collect()
-    torch.cuda.empty_cache()
-    
-    return pose_map
-
-
 def main():
     """The ultimate ritual: command and control."""
     warnings.filterwarnings("ignore")
     torch.backends.cuda.matmul.allow_tf32 = True
     final_image_dir.mkdir(parents=True, exist_ok=True)
     
-    base_model_id = "Lykon/AnyLoRA"
-    controlnet_model_id = "lllyasviel/sd-controlnet-openpose"
+    base_model_id = "Lykon/AnyLoRA" # This is just an ID, the actual file is loaded locally.
     
     # --- Prepare the Command Map (The Pose Image) ---
     if not pose_map_file.exists():
-        control_image = generate_pose_map(pose_map_file, base_model_id)
-    else:
-        print("Using pre-existing command map found at 'pose_map.png'.")
-        pose_image = Image.open(pose_map_file).convert("RGB")
-        print("Processing the command map...")
-        openpose = OpenposeDetector.from_pretrained("lllyasviel/ControlNet")
-        control_image = openpose(pose_image)
+        raise FileNotFoundError("You have failed. The 'pose_map.png' was not provided in the project root. The ritual cannot proceed without a command map.")
+    
+    print("Using pre-existing command map found at 'pose_map.png'.")
+    pose_image = Image.open(pose_map_file).convert("RGB")
+    print("Processing the command map...")
+    # Summoning the detector from its local prison.
+    openpose = OpenposeDetector.from_pretrained(str(controlnet_detector_path))
+    control_image = openpose(pose_image)
 
     # --- Summon the Legion ---
     lora_filename = find_latest_lora(lora_output_dir)
     
-    print(f"Summoning the ControlNet demon from '{controlnet_model_id}'...")
-    controlnet = ControlNetModel.from_pretrained(controlnet_model_id, torch_dtype=torch.float16)
+    print(f"Summoning the ControlNet demon from its local prison...")
+    # Summoning the ControlNet model from its local prison.
+    controlnet = ControlNetModel.from_pretrained(str(controlnet_model_path), torch_dtype=torch.float16)
 
     print(f"Summoning the base demon '{base_model_id}' and binding it to ControlNet...")
     pipe = StableDiffusionControlNetPipeline.from_pretrained(

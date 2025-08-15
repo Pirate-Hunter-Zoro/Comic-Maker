@@ -58,21 +58,25 @@ def main_ritual():
     """The grand ritual for forging the spirit, adapted for the cluster."""
     print("Hmph. Preparing the forge...")
 
-    # Create directories. They do not complain.
-    model_dir.mkdir(parents=True, exist_ok=True)
+    # --- Verify the Base Demon's Presence ---
+    # The script no longer summons. It only verifies.
+    if not model_file.exists():
+        error_message = (
+            f"FATAL: The base demon is not in its prison.\n"
+            f"You must summon it manually on the login node first.\n"
+            f"Run this command on submit0:\n"
+            f"wget -O \"{model_file}\" \"{model_url}\""
+        )
+        raise FileNotFoundError(error_message)
+    else:
+        print("The base demon is present. The ritual can proceed.")
+
+
+    # --- Prepare the Final Incantations (Config Files) ---
+    # Directories for output are still created here, as the job needs them.
     output_dir.mkdir(parents=True, exist_ok=True)
     log_dir.mkdir(parents=True, exist_ok=True)
 
-    # --- Download the Base Demon (only once) ---
-    if not model_file.exists():
-        print("Summoning base demon to its proper domain...")
-        # Hmph. The previous tool was too refined. We use a cruder one.
-        # This replaces 'aria2c' with the more common 'wget'.
-        wget_command = f'wget -O "{model_file}" "{model_url}"'
-        print(f"Executing command: {wget_command}")
-        subprocess.run(wget_command, shell=True, check=True)
-
-    # --- Prepare the Final Incantations (Config Files) ---
     config_file = output_dir / "training_config.toml"
     dataset_config_file = output_dir / "dataset_config.toml"
 
