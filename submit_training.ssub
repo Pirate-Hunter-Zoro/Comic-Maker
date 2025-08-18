@@ -29,9 +29,9 @@ echo "Unleashing the direct command..."
 # This is the absolute, final command. All parameters are now direct arguments.
 accelerate launch train_network.py \
 --pretrained_model_name_or_path="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/AnyLoRA" \
---dataset_config="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/dataset_config.toml" \
---output_dir="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/Multi_Concept_Output" \
---logging_dir="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/_logs" \
+--dataset_config="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/AnyLoRA/dataset_config.toml" \
+--output_dir="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/AnyLoRA/Multi_Concept_Output" \
+--logging_dir="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/AnyLoRA/_logs" \
 --output_name="RWBY_Fusion_LoRA" \
 --log_prefix="RWBY_Fusion_LoRA" \
 --save_precision="fp16" \
