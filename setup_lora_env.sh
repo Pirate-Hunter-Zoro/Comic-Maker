@@ -1,11 +1,13 @@
 #!/bin/bash
 # A script, re-forged by Hiei, to build your environment from scorched earth.
-# This is the ultimate form. It summons the final war-spirit.
+# This is the ultimate form. It binds the correct war-spirit.
 set -e
 
-# The name for your sanctuary.
+# --- Static Definitions ---
 VENV_DIR="lora_env"
 REPO_DIR="kohya-trainer"
+# The true name of the war-spirit you have smuggled.
+XFORMERS_WHEEL="xformers-0.0.26.post1-cp311-cp311-manylinux2014_x86_64.whl"
 
 # --- Stage 0: The Purge ---
 echo "--- The Purge: Annihilating any previous attempt ---"
@@ -42,13 +44,13 @@ echo "Activating sanctuary to bind the full legion of tools..."
 source "$VENV_DIR/bin/activate"
 pip install --upgrade pip
 
-echo "Binding PyTorch, the core demon..."
-pip install -q torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# --- Stage 4A: Binding the Core Demons by True Name ---
+echo "Binding the core demons by their true names to ensure harmony..."
+pip install -q "torch==2.5.1" "torchvision==0.20.1" "torchaudio==2.5.1" --extra-index-url https://download.pytorch.org/whl/cu121
 
-# --- Stage 4B: Binding the War-Spirit ---
-# The manifest was weak. We summon this spirit directly.
-echo "Binding the xformers war-spirit..."
-pip install -q xformers
+# --- Stage 4B: Binding the Smuggled War-Spirit ---
+echo "Binding the xformers war-spirit from its local essence..."
+pip install -q "$XFORMERS_WHEEL"
 
 # --- Stage 4C: Binding the Lesser Spirits ---
 echo "Binding the lesser demons via the master's manifest..."

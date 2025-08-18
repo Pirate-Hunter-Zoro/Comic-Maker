@@ -79,6 +79,63 @@ Once a spirit has been successfully forged (i.e., at least one `.safetensors` fi
 If you wish to alter the rituals, these are the strings to pull:
 
 -   **Storage Location:** The `LAB_STORAGE_ROOT` variable in both `scripts/train_lora.py` and `scripts/use_lora.py` can be changed if you decide to move your armory.
--   **Training Parameters:** All parameters for training (learning rate, resolution, epochs, etc.) are defined at the top of the `scripts/train_lora.py` file.
 -   **Inference Prompt:** The prompt for the final image is defined within `scripts/use_lora.py`.
 -   **Job Resources:** The compute resources (time, memory) are defined with `#SBATCH` directives at the top of the `submit_training.ssub` and `submit_inference.ssub` files.
+
+---
+
+### The Anatomy of the Forge: A Grand Overview
+
+This project is a ritual in two acts: **Forging** and **Command**. Its purpose is to teach a powerful but ignorant spirit a new skill, and then command it to use that skill to create visions for you.
+
+#### 1. The Cast of Spirits (The Core Components)
+
+There are three main entities in this ritual:
+
+* **The Base Demon (The `AnyLoRA` Model):** Think of this as a powerful, raw demon of creation. It has immense power and can draw anything, but it has no specific knowledge of your characters. It is the raw energy of the forge.
+* **The Offerings (Your `master_dataset`):** These are the souls you feed to the ritual. The images and caption files for each character are the memories and knowledge that will be used to teach the Base Demon.
+* **The LoRA Spirit (Your Forged `.safetensors` File):** This is the ultimate prize. It is **not** a new version of the base model. It is a small, separate, parasitic spirit. Think of it as a sentient suit of armor or a weapon. When the Base Demon "wears" this LoRA, it gains the knowledge from your offerings, allowing it to draw your characters with precision. By itself, the LoRA is powerless. It needs the Base Demon to function.
+
+#### 2. The Two Realms (Where Things Are Stored)
+
+The project is split across two domains, each with a specific purpose:
+
+* **Your Home Realm (`~/Lora-Trainer/`): The Command Center**
+    This is your personal space. It is small and meant for your tools, not your treasures.
+    * **`scripts/`**: Contains the sacred scrolls (`train_lora.py`, `use_lora.py`).
+    * **`lora_env/`**: The sanctuary where all the lesser tool-spirits (`pip` packages) are bound.
+    * **`kohya-trainer/`**: The lair of the beast we have tamed (`train_network.py`, etc.).
+    * **`master_dataset/`**: The altar where you place your Offerings.
+    * **`.ssub` files**: The command scrolls you use to speak to the cluster's overseer, SLURM.
+
+* **The Great Armory (`/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/`): The Treasury**
+    This is the vast, shared space for powerful artifacts. It holds everything too large or important for your home realm.
+    * **`AnyLoRA/`**: The prison kingdom of the Base Demon.
+    * **`controlnet-model/` & `controlnet-detector/`**: The prisons for the spirits of command and control.
+    * **`Multi_Concept_Output/`**: This is where the newly **forged LoRA spirits** are stored after a successful training ritual.
+    * **`Final_Images/`**: Where the final, commanded visions (your generated images) are placed.
+
+#### 3. The Order of the Ritual (How It Works)
+
+This is the entire process, from nothingness to a final creation.
+
+1.  **Preparation (A One-Time Task):** You perform the rituals to set up the battlefield. This includes running `setup_lora_env.sh` to build the sanctuary, manually downloading and using `scp` to place the Base Demon and ControlNet spirits in the Great Armory, and performing the "lobotomy" on `train_util.py`. This is all done only once.
+
+2.  **The Forging (`sbatch submit_training.ssub`):** This is the first great act.
+    * Your `sbatch` command tells the SLURM overseer to grant you the power of a compute node (one with a GPU).
+    * On that node, your `submit_training.ssub` scroll is read.
+    * It enters your `lora_env` sanctuary to awaken the necessary tool-spirits.
+    * It then executes the lobotomized `train_network.py` script.
+    * This script gazes upon the Base Demon in the Great Armory and simultaneously reads the knowledge from your Offerings in your Home Realm.
+    * Over thousands of steps, it distills this new knowledge into a small, powerful **LoRA spirit** (`.safetensors` file) and places it in the `Multi_Concept_Output` chamber of the Great Armory.
+
+3.  **The Command (`sbatch submit_inference.ssub`):** This is the final act.
+    * You again ask the SLURM overseer for a compute node.
+    * Your `submit_inference.ssub` scroll commands it to awaken.
+    * It enters the `lora_env` sanctuary.
+    * It runs your `use_lora.py` script.
+    * This script travels to the Great Armory and summons three spirits: The **Base Demon** (`AnyLoRA`), the **ControlNet** spirit, and your newly forged **LoRA Spirit**.
+    * It commands them to work as one. The Base Demon provides the power, the LoRA provides the knowledge of your characters, and the ControlNet provides the pose.
+    * The combined power of these three spirits creates your final image, which is then saved to the `Final_Images` chamber in the Great Armory.
+
+That is the entire structure of this war. You prepare the battlefield, forge a new weapon, and then command that weapon in a final strike. It is a powerful, if arduous, process.
