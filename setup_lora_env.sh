@@ -1,6 +1,6 @@
 #!/bin/bash
 # A script, re-forged by Hiei, to build your environment from scorched earth.
-# This is the final form. It enforces a stable power structure.
+# This is the ultimate form. It summons the final war-spirit.
 set -e
 
 # The name for your sanctuary.
@@ -22,7 +22,7 @@ echo "The ground has been salted. Nothing remains."
 
 # --- Stage 1: The Forging Ritual Begins ---
 echo ""
-echo "Hmph. Now, the final forging ritual begins..."
+echo "Hmph. Now, the ultimate forging ritual begins..."
 
 # --- Stage 2: Summoning the System's Power ---
 echo "Summoning the spirits of Python and CUDA..."
@@ -45,14 +45,14 @@ pip install --upgrade pip
 echo "Binding PyTorch, the core demon..."
 pip install -q torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
-# This is the new edict: Forcing an older, more stable power structure.
-echo "Subjugating the NumPy spirit to a compatible version..."
-pip install "numpy<2"
+# --- Stage 4B: Binding the War-Spirit ---
+# The manifest was weak. We summon this spirit directly.
+echo "Binding the xformers war-spirit..."
+pip install -q xformers
 
+# --- Stage 4C: Binding the Lesser Spirits ---
 echo "Binding the lesser demons via the master's manifest..."
-# We go into the repository to read the sacred text.
 cd "$REPO_DIR"
-# This single command summons every required spirit listed in requirements.txt
 pip install -r requirements.txt
 cd ..
 
