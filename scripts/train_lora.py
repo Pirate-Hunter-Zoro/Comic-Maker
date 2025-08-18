@@ -1,5 +1,5 @@
 # A precise incantation for forging a LoRA spirit.
-# Now with the power to forge its own Accelerate scroll.
+# This is the truly final form.
 import os
 import toml
 import re
@@ -20,7 +20,7 @@ caption_extension = ".txt"
 shuffle_caption = True
 keep_tokens = 0
 max_train_epochs = 15
-save_every_n_steps = 10000 # Your requested change.
+save_every_n_steps = 10000
 keep_only_last_n_epochs = 30
 train_batch_size = 1
 
@@ -41,13 +41,9 @@ network_alpha = 256
 
 # --- Static Definitions ---
 LAB_STORAGE_ROOT = Path("/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer")
-
-# The root of your scripts and dataset remains in your home directory.
 project_root = Path(__file__).parent.parent
 repo_dir = project_root / "kohya-trainer"
 master_dataset_dir = project_root / "master_dataset"
-
-# Models, outputs, and logs are banished to the vastness of /media/labs.
 model_dir = LAB_STORAGE_ROOT / "model"
 output_dir = LAB_STORAGE_ROOT / "Multi_Concept_Output"
 log_dir = LAB_STORAGE_ROOT / "_logs"
@@ -58,25 +54,17 @@ def main_ritual():
     """The grand ritual for forging the spirit, adapted for the cluster."""
     print("Hmph. Preparing the forge...")
 
-    # --- Verify the Base Demon's Presence ---
     if not model_file.exists():
-        error_message = (
-            f"FATAL: The base demon is not in its prison.\n"
-            f"You must summon it manually on the login node first."
-        )
-        raise FileNotFoundError(error_message)
+        raise FileNotFoundError("FATAL: The base demon is not in its prison.")
     else:
         print("The base demon is present. The ritual can proceed.")
 
-    # --- Forge the Accelerate Scroll if it is Missing ---
-    # This is the restored part of the incantation.
     if not accelerate_config_file.exists():
         print(f"Hmph. The scroll of Accelerate is missing. I will forge a default one...")
         accelerate_config_file.parent.mkdir(parents=True, exist_ok=True)
         write_basic_config(save_location=str(accelerate_config_file))
         print(f"A default scroll has been written to: {accelerate_config_file}")
 
-    # --- Prepare the Final Incantations (Config Files) ---
     output_dir.mkdir(parents=True, exist_ok=True)
     log_dir.mkdir(parents=True, exist_ok=True)
 
@@ -84,11 +72,15 @@ def main_ritual():
     dataset_config_file = output_dir / "dataset_config.toml"
 
     print("Writing the scrolls of power (TOML configs)...")
+    
+    # --- CRITICAL CHANGE ---
+    # The ritual now points to the entire model directory (the fortress),
+    # not just the .ckpt file (the cell). This allows it to find the tokenizer attendants.
     config_dict = {
       "additional_network_arguments": {"unet_lr": unet_lr, "text_encoder_lr": text_encoder_lr, "network_dim": network_dim, "network_alpha": network_alpha, "network_module": "networks.lora"},
       "optimizer_arguments": {"learning_rate": unet_lr, "lr_scheduler": lr_scheduler, "lr_scheduler_num_cycles": lr_scheduler_num_cycles, "lr_warmup_steps": int(lr_warmup_ratio * max_train_epochs), "optimizer_type": optimizer},
       "training_arguments": {"max_train_epochs": max_train_epochs, "save_every_n_steps": save_every_n_steps, "save_last_n_epochs": keep_only_last_n_epochs, "train_batch_size": train_batch_size, "clip_skip": 2, "min_snr_gamma": min_snr_gamma_value, "seed": 42, "max_token_length": 225, "xformers": True, "lowram": False, "save_precision": "fp16", "mixed_precision": "fp16", "output_dir": str(output_dir), "logging_dir": str(log_dir), "output_name": "RWBY_Fusion_LoRA", "log_prefix": "RWBY_Fusion_LoRA", "log_with": "tensorboard"},
-      "model_arguments": {"pretrained_model_name_or_path": str(model_file), "v2": False, "v_parameterization": False},
+      "model_arguments": {"pretrained_model_name_or_path": str(model_dir), "v2": False, "v_parameterization": False},
       "saving_arguments": {"save_model_as": "safetensors"},
       "dataset_arguments": {"cache_latents": True},
     }
@@ -113,7 +105,6 @@ def main_ritual():
     }
     with open(dataset_config_file, "w") as f: f.write(toml.dumps(dataset_config_dict))
 
-    # --- Check for Existing Checkpoints before Execution --
     resume_path = None
     if output_dir.exists():
         lora_files = [f for f in os.listdir(output_dir) if f.lower().endswith('.safetensors')]
@@ -132,7 +123,6 @@ def main_ritual():
     else:
         print("No existing spirit found. Beginning a new forging.")
 
-    # --- Unleash the Training ---
     command = [
         "accelerate", "launch", f"--config_file={accelerate_config_file}",
         "--num_cpu_threads_per_process=1", str(repo_dir / "train_network.py"),
