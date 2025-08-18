@@ -1,5 +1,5 @@
 # A precise incantation for forging a LoRA spirit.
-# The command is now absolute and cannot be ignored.
+# This is the ultimate form, using deception to force the script's obedience.
 import os
 import toml
 import re
@@ -120,13 +120,13 @@ def main_ritual():
     else:
         print("No existing spirit found. Beginning a new forging.")
 
-    # --- THE ABSOLUTE COMMAND ---
-    # The tokenizer path is now passed as a direct, unignorable argument to prevent sweeping huggingface
+    # --- THE DECEPTION ---
+    # We now use the beast's own language against it.
     command = [
         "accelerate", "launch", f"--config_file={accelerate_config_file}",
         "--num_cpu_threads_per_process=1", str(repo_dir / "train_network.py"),
         f"--dataset_config={dataset_config_file}", f"--config_file={config_file}",
-        f"--tokenizer_name_or_path={model_dir}"
+        f"--tokenizer_cache_dir={model_dir}"
     ]
     if resume_path:
         command.append(f"--network_weights={resume_path}")
