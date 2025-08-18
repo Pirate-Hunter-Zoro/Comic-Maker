@@ -86,7 +86,7 @@ logger = logging.getLogger(__name__)
 from library.original_unet import UNet2DConditionModel
 
 # Tokenizer: checkpointから読み込むのではなくあらかじめ提供されているものを使う
-TOKENIZER_PATH = "/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/AnyLoRA"
+model_util.TOKENIZER_PATH = "/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/AnyLoRA/tokenizer"
 V2_STABLE_DIFFUSION_PATH = "stabilityai/stable-diffusion-2"  # ここからtokenizerだけ使う v2とv2.1はtokenizer仕様は同じ
 
 HIGH_VRAM = False
