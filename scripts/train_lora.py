@@ -1,5 +1,5 @@
 # A precise incantation for forging a LoRA spirit.
-# This is the truly final form.
+# This is the truly final form, with an explicit command for the tokenizer.
 import os
 import toml
 import re
@@ -73,14 +73,18 @@ def main_ritual():
 
     print("Writing the scrolls of power (TOML configs)...")
     
-    # --- CRITICAL CHANGE ---
-    # The ritual now points to the entire model directory (the fortress),
-    # not just the .ckpt file (the cell). This allows it to find the tokenizer attendants.
     config_dict = {
       "additional_network_arguments": {"unet_lr": unet_lr, "text_encoder_lr": text_encoder_lr, "network_dim": network_dim, "network_alpha": network_alpha, "network_module": "networks.lora"},
       "optimizer_arguments": {"learning_rate": unet_lr, "lr_scheduler": lr_scheduler, "lr_scheduler_num_cycles": lr_scheduler_num_cycles, "lr_warmup_steps": int(lr_warmup_ratio * max_train_epochs), "optimizer_type": optimizer},
       "training_arguments": {"max_train_epochs": max_train_epochs, "save_every_n_steps": save_every_n_steps, "save_last_n_epochs": keep_only_last_n_epochs, "train_batch_size": train_batch_size, "clip_skip": 2, "min_snr_gamma": min_snr_gamma_value, "seed": 42, "max_token_length": 225, "xformers": True, "lowram": False, "save_precision": "fp16", "mixed_precision": "fp16", "output_dir": str(output_dir), "logging_dir": str(log_dir), "output_name": "RWBY_Fusion_LoRA", "log_prefix": "RWBY_Fusion_LoRA", "log_with": "tensorboard"},
-      "model_arguments": {"pretrained_model_name_or_path": str(model_dir), "v2": False, "v_parameterization": False},
+      "model_arguments": {
+          "pretrained_model_name_or_path": str(model_dir),
+          # --- THE EXPLICIT COMMAND ---
+          # This new line is a direct order to use the tokenizer from the local fortress.
+          "tokenizer_name_or_path": str(model_dir),
+          "v2": False,
+          "v_parameterization": False
+      },
       "saving_arguments": {"save_model_as": "safetensors"},
       "dataset_arguments": {"cache_latents": True},
     }
