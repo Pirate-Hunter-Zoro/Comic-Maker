@@ -1,33 +1,60 @@
 #!/bin/bash
 #SBATCH --partition=c3_accel
-#SBATCH --job-name=lora_training
+#SBATCH --job-name=lora_training_final
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=48000
 #SBATCH --gpus=1
-#SBATCH --time=7-00:00:00
+#SBATCH --time=24:00:00
 #SBATCH --output=logs/training-%J.stdout
 #SBATCH --error=logs/training-%J.stderr
 
-# --- The Ritual Begins ---
-echo "Hmph. The forging of a new spirit begins on $(hostname)."
-echo "Job ID: ${SLURM_JOB_ID}"
-# Create the log directory if it doesn't exist. A trivial foresight.
+# --- The Final Ritual ---
+echo "The final ritual begins on $(hostname)."
 mkdir -p ~/Lora-Trainer/logs
 
-# Load the necessary powers from the system.
+# Load system powers
 module load Python/3.11.5-GCCcore-13.2.0
 module load CUDA/12.3.0
 
-# Enter your sanctuary.
+# Enter your sanctuary
 source ~/Lora-Trainer/lora_env/bin/activate
 
-# Navigate to the root of your domain.
-cd ~/Lora-Trainer
+# Go to the beast's lair
+cd ~/Lora-Trainer/kohya-trainer
 
-# Unleash the training incantation.
-echo "Executing train_lora.py..."
-python3 scripts/train_lora.py
+echo "Unleashing the direct command..."
 
-echo "The forging is complete."
+# This is the absolute, final command. All parameters are now direct arguments.
+accelerate launch train_network.py \
+--pretrained_model_name_or_path="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/AnyLoRA" \
+--dataset_config="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/dataset_config.toml" \
+--output_dir="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/Multi_Concept_Output" \
+--logging_dir="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/_logs" \
+--output_name="RWBY_Fusion_LoRA" \
+--log_prefix="RWBY_Fusion_LoRA" \
+--save_precision="fp16" \
+--mixed_precision="fp16" \
+--network_module=networks.lora \
+--network_dim=512 \
+--network_alpha=256 \
+--resolution=1024 \
+--train_batch_size=1 \
+--max_train_epochs=15 \
+--learning_rate=2e-4 \
+--unet_lr=2e-4 \
+--text_encoder_lr=6e-5 \
+--lr_scheduler="cosine_with_restarts" \
+--lr_scheduler_num_cycles=4 \
+--lr_warmup_steps=0 \
+--optimizer_type="AdamW8bit" \
+--save_every_n_steps=10000 \
+--save_model_as="safetensors" \
+--clip_skip=2 \
+--seed=42 \
+--xformers \
+--cache_latents \
+--no_half_vae
+
+echo "The ritual is complete."
