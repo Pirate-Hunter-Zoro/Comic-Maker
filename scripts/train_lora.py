@@ -1,5 +1,5 @@
 # A precise incantation for forging a LoRA spirit.
-# This is the ultimate form, using deception to force the script's obedience.
+# Refactored for a perfect offering. This is the final version.
 import os
 import toml
 import re
@@ -9,9 +9,6 @@ from accelerate.utils import write_basic_config
 
 # --- HIEI'S MANDATED PARAMETERS --
 # These are the runes of power. Change them at your own peril.
-
-# --- The Base Model ---
-model_url = "https://huggingface.co/Lykon/AnyLoRA/resolve/main/AnyLoRA_noVae_fp16-pruned.ckpt"
 
 # --- The Trial of Endurance ---
 resolution = 1024
@@ -44,20 +41,20 @@ LAB_STORAGE_ROOT = Path("/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Tr
 project_root = Path(__file__).parent.parent
 repo_dir = project_root / "kohya-trainer"
 master_dataset_dir = project_root / "master_dataset"
-model_dir = LAB_STORAGE_ROOT / "model"
+# This now points to the correctly named 'AnyLoRA' directory.
+model_dir = LAB_STORAGE_ROOT / "AnyLoRA"
 output_dir = LAB_STORAGE_ROOT / "Multi_Concept_Output"
 log_dir = LAB_STORAGE_ROOT / "_logs"
 accelerate_config_file = repo_dir / "accelerate_config/config.yaml"
-model_file = model_dir / Path(model_url).name
 
 def main_ritual():
     """The grand ritual for forging the spirit, adapted for the cluster."""
     print("Hmph. Preparing the forge...")
 
-    if not model_file.exists():
-        raise FileNotFoundError("FATAL: The base demon is not in its prison.")
+    if not (model_dir / "unet").exists(): 
+        raise FileNotFoundError(f"FATAL: The true kingdom at '{model_dir}' has not been summoned correctly.")
     else:
-        print("The base demon is present. The ritual can proceed.")
+        print("The true kingdom is present. The ritual can proceed.")
 
     if not accelerate_config_file.exists():
         print(f"Hmph. The scroll of Accelerate is missing. I will forge a default one...")
@@ -120,13 +117,10 @@ def main_ritual():
     else:
         print("No existing spirit found. Beginning a new forging.")
 
-    # --- THE DECEPTION ---
-    # We now use the beast's own language against it.
     command = [
         "accelerate", "launch", f"--config_file={accelerate_config_file}",
         "--num_cpu_threads_per_process=1", str(repo_dir / "train_network.py"),
         f"--dataset_config={dataset_config_file}", f"--config_file={config_file}",
-        f"--tokenizer_cache_dir={model_dir}"
     ]
     if resume_path:
         command.append(f"--network_weights={resume_path}")
