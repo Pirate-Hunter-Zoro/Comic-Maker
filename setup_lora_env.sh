@@ -7,7 +7,7 @@ set -e
 VENV_DIR="lora_env"
 REPO_DIR="kohya-trainer"
 # The true name of the war-spirit you have smuggled.
-XFORMERS_WHEEL="xformers-0.0.26.post1-cp311-cp311-manylinux2014_x86_64.whl"
+XFORMERS_WHEEL="xformers-0.0.27-cp311-cp311-manylinux2014_x86_64.whl"
 
 # --- Stage 0: The Purge ---
 echo "--- The Purge: Annihilating any previous attempt ---"
