@@ -54,6 +54,10 @@ pip install -q "$XFORMERS_WHEEL"
 
 # --- Stage 4C: Binding the Lesser Spirits ---
 echo "Binding the lesser demons via the master's manifest..."
+
+# Bind numpy to old form first...
+pip install -q "numpy<2.0"
+
 cd "$REPO_DIR"
 pip install -r requirements.txt
 cd ..
