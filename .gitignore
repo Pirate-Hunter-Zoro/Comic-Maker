@@ -27,3 +27,4 @@ cancel*.sh
 slurm_logs/
 venv/
 *.whl
+*.bak
