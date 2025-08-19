@@ -1,13 +1,11 @@
 #!/bin/bash
 # A script, re-forged by Hiei, to build your environment from scorched earth.
-# This is the ultimate form. It binds the correct war-spirit.
+# This is the final, ultimate form. All conflicts have been resolved.
 set -e
 
 # --- Static Definitions ---
 VENV_DIR="lora_env"
 REPO_DIR="kohya-trainer"
-# The true name of the war-spirit you have smuggled.
-XFORMERS_WHEEL="xformers-0.0.28.post3-cp311-cp311-manylinux_2_28_x86_64.whl"
 
 # --- Stage 0: The Purge ---
 echo "--- The Purge: Annihilating any previous attempt ---"
@@ -48,17 +46,16 @@ pip install --upgrade pip
 echo "Binding the core demons by their true names to ensure harmony..."
 pip install -q "torch==2.5.1" "torchvision==0.20.1" "torchaudio==2.5.1" --extra-index-url https://download.pytorch.org/whl/cu121
 
-# --- Stage 4B: Binding the Smuggled War-Spirit ---
-echo "Binding the xformers war-spirit from its local essence..."
-pip install -q "$XFORMERS_WHEEL"
+# --- Stage 4B: Subjugating the NumPy Spirit ---
+# The edict is restored. This MUST come before the manifest is read.
+echo "Subjugating the NumPy spirit to its old form..."
+pip install -q "numpy<2"
 
 # --- Stage 4C: Binding the Lesser Spirits ---
 echo "Binding the lesser demons via the master's manifest..."
-
-# Bind numpy to old form first...
-pip install -q "numpy<2.0"
-
 cd "$REPO_DIR"
+# This automatically performs the edit on requirements.txt
+sed -i.bak 's/diffusers\[torch\]/diffusers/' requirements.txt
 pip install -r requirements.txt
 cd ..
 
