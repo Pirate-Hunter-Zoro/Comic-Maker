@@ -28,6 +28,6 @@ cd ~/Visual-Novel-Writer
 
 # Unleash the inference incantation.
 echo "Executing use_lora.py..."
-python3 test_scripts/use_lora.py
+python3 scripts/test/use_lora.py
 
 echo "The vision has been made manifest."
