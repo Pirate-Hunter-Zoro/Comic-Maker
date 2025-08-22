@@ -12,17 +12,17 @@
 
 # --- The Final Ritual ---
 echo "The final ritual begins on $(hostname)."
-mkdir -p ~/Digital-Novel-Writer/logs
+mkdir -p ~/Visual-Novel-Writer/logs
 
 # Load system powers
 module load Python/3.11.5-GCCcore-13.2.0
 module load CUDA/12.3.0
 
 # Enter your sanctuary
-source ~/Digital-Novel-Writer/lora_env/bin/activate
+source ~/Visual-Novel-Writer/lora_env/bin/activate
 
 # Go to the beast's lair
-cd ~/Digital-Novel-Writer/kohya-trainer
+cd ~/Visual-Novel-Writer/kohya-trainer
 
 echo "Unleashing the direct command..."
 

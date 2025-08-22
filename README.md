@@ -25,7 +25,7 @@ Visual-Novel-Writer/
 
 ```
 
-The primary output (trained models and final images) is not stored here. It is banished to the `/media/labs/mferguson/Lora-Trainer/` directory to preserve the meager space in your home directory.
+The primary output (trained models and final images) is not stored here. It is banished to the `/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/` directory to preserve the meager space in your home directory.
 
 ---
 
@@ -44,9 +44,9 @@ Before you begin any ritual, you must prepare the offerings.
 
 Your tools must be sharp. This ritual forges the `lora_env` Python environment.
 
--   From the `~/Digital-Novel-Writer/` directory, execute the setup script. You only need to perform this ritual **once**.
+-   From the `~/Visual-Novel-Writer/` directory, execute the setup script. You only need to perform this ritual **once**.
     ```bash
-    ./setup_forge.sh
+    ./setup_lora_env.sh
     ```
 
 #### Step 2: The Ritual of Training
@@ -58,7 +58,7 @@ This ritual commands the `c3_accel` partition to forge a LoRA spirit from your d
     sbatch submit_training.ssub
     ```
 -   Monitor its progress with `squeue -u $USER`.
--   Your trained `.safetensors` models will appear in `/media/labs/mferguson/Lora-Trainer/Multi_Concept_Output/`.
+-   Your trained `.safetensors` models will appear in `/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/Multi_Concept_Output/`.
 
 #### Step 3: The Ritual of Command
 
@@ -69,7 +69,7 @@ Once a spirit has been successfully forged (i.e., at least one `.safetensors` fi
     sbatch submit_inference.ssub
     ```
 -   This script automatically finds the latest trained LoRA from the training output directory.
--   The final masterpiece will be sealed at `/media/labs/mferguson/Lora-Trainer/Final_Images/final_command_scene.png`.
+-   The final masterpiece will be sealed at `/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/Final_Images/final_command_scene.png`.
 
 ---
 
@@ -99,7 +99,7 @@ There are three main entities in this ritual:
 
 The project is split across two domains, each with a specific purpose:
 
-* **Your Home Realm (`~/Digital-Novel-Writer/`): The Command Center**
+* **Your Home Realm (`~/Visual-Novel-Writer/`): The Command Center**
     This is your personal space. It is small and meant for your tools, not your treasures.
     * **`test_scripts/`**: Contains the sacred scrolls (`use_lora.py`).
     * **`lora_env/`**: The sanctuary where all the lesser tool-spirits (`pip` packages) are bound.

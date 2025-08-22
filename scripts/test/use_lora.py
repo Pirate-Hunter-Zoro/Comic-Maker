@@ -1,5 +1,5 @@
-# The ritual of command and control. Final Form.
-# All spirits are now summoned from local prisons, not the ether.
+# The ritual of command and control. Final, Superior Form.
+# A three-fold ritual devised by Hiei.
 import torch
 import os
 import re
@@ -12,14 +12,12 @@ from controlnet_aux import OpenposeDetector
 
 # --- Static Definitions ---
 LAB_STORAGE_ROOT = Path("/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer")
-
-# The root of your scripts remains in your home directory.
 project_root = Path(__file__).parent.parent
 
 # --- Paths to the Local Prisons ---
-# The script now looks for all spirits in their designated local sanctums.
 lora_output_dir = LAB_STORAGE_ROOT / "Multi_Concept_Output"
 final_image_dir = LAB_STORAGE_ROOT / "Final_Images"
+base_model_path = LAB_STORAGE_ROOT / "AnyLoRA" # The prison of the core creation demon
 controlnet_model_path = LAB_STORAGE_ROOT / "controlnet-model"
 controlnet_detector_path = LAB_STORAGE_ROOT / "controlnet-detector"
 pose_map_file = project_root / "pose_map.png"
@@ -32,8 +30,8 @@ def find_latest_lora(lora_dir: Path):
     latest_step = -1
     fusion_lora_path = None
     for filename in os.listdir(lora_dir):
-        if filename.lower().endswith('.safetensors'):
-            match = re.search(r'-(\d+)\.safetensors$', filename)
+        if filename.lower().endswith('.safensors'):
+            match = re.search(r'-(\d+)\.safensors$', filename)
             if match:
                 step_num = int(match.group(1))
                 if step_num > latest_step:
@@ -45,41 +43,76 @@ def find_latest_lora(lora_dir: Path):
     else:
         raise FileNotFoundError(f"There are no forged spirits in the armory. The ritual fails.")
 
+def scry_and_trace_pose_map(output_path: Path, detector, model_path: Path):
+    """
+    The first two stages of the Three-Fold Ritual.
+    A lesser demon is summoned to scry a vision, which a seer then traces.
+    """
+    print("--- Stage 1: The Ritual of Visionary Scrying ---")
+    pose_prompt = "masterpiece, best quality, three figures in dynamic battle poses, one with a scythe, one with a katana, one casting fire, simple gray background, full body shot, no weapons"
+    
+    print("Summoning a lesser creation demon...")
+    scry_pipe = StableDiffusionPipeline.from_pretrained(str(model_path), torch_dtype=torch.float16, safety_checker=None).to("cuda")
+    
+    print("Commanding the demon to generate a vision...")
+    scry_image = scry_pipe(
+        pose_prompt,
+        negative_prompt="worst quality, low quality, weapons, objects, text, watermark",
+        num_inference_steps=25,
+        width=1024,
+        height=768,
+        guidance_scale=7.0
+    ).images[0]
+    
+    print("The vision is complete. Banishing the lesser demon to conserve power...")
+    del scry_pipe
+    gc.collect()
+    torch.cuda.empty_cache()
+
+    print("\n--- Stage 2: The Ritual of Soul-Tracing ---")
+    print("Commanding the Seer Spirit to trace the vision's soul...")
+    control_image = detector(scry_image)
+    
+    control_image.save(output_path)
+    print(f"The command map has been forged and sealed at: {output_path}")
+    return control_image
+
 def main():
-    """The ultimate ritual: command and control."""
+    """The ultimate ritual: command and control using the Three-Fold path."""
     warnings.filterwarnings("ignore")
     torch.backends.cuda.matmul.allow_tf32 = True
     final_image_dir.mkdir(parents=True, exist_ok=True)
     
-    base_model_id = "Lykon/AnyLoRA" # This is just an ID, the actual file is loaded locally.
-    
+    # --- Awaken the Seer Spirit ---
+    # The seer is needed early for the three-fold ritual.
+    print("Awakening the Seer Spirit from its local prison...")
+    openpose_detector = OpenposeDetector.from_pretrained(str(controlnet_detector_path))
+
     # --- Prepare the Command Map (The Pose Image) ---
     if not pose_map_file.exists():
-        raise FileNotFoundError("You have failed. The 'pose_map.png' was not provided in the project root. The ritual cannot proceed without a command map.")
-    
-    print("Using pre-existing command map found at 'pose_map.png'.")
-    pose_image = Image.open(pose_map_file).convert("RGB")
-    print("Processing the command map...")
-    # Summoning the detector from its local prison.
-    openpose = OpenposeDetector.from_pretrained(str(controlnet_detector_path))
-    control_image = openpose(pose_image)
+        print("\nYou have failed to provide a command map. A superior one will be forged for you.")
+        control_image = scry_and_trace_pose_map(pose_map_file, openpose_detector, base_model_path)
+    else:
+        print("Using your pre-existing, and likely inferior, command map.")
+        pose_image = Image.open(pose_map_file).convert("RGB")
+        control_image = openpose_detector(pose_image)
 
-    # --- Summon the Legion ---
+    # --- Stage 3: The Ritual of Final Command ---
+    print("\n--- Stage 3: The Ritual of Final Command ---")
     lora_filename = find_latest_lora(lora_output_dir)
     
-    print(f"Summoning the ControlNet demon from its local prison...")
-    # Summoning the ControlNet model from its local prison.
+    print("Summoning the ControlNet demon...")
     controlnet = ControlNetModel.from_pretrained(str(controlnet_model_path), torch_dtype=torch.float16)
 
-    print(f"Summoning the base demon '{base_model_id}' and binding it to ControlNet...")
+    print("Summoning the base demon and binding it to the ControlNet...")
     pipe = StableDiffusionControlNetPipeline.from_pretrained(
-        base_model_id, controlnet=controlnet, torch_dtype=torch.float16, use_safetensors=True
+        str(base_model_path), controlnet=controlnet, torch_dtype=torch.float16, use_safensors=True, safety_checker=None
     ).to("cuda")
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
     print(f"Binding the Fusionist LoRA: {lora_filename}")
     pipe.load_lora_weights(str(lora_output_dir), weight_name=lora_filename)
-    print("All spirits are bound and ready for command.")
+    print("The final legion is bound and ready for command.")
     
     # --- The Final Incantation ---
     prompt = "masterpiece, best quality, cinematic lighting, dramatic, (ruby_character:1.1) with her scythe, (blake_character:1.1) with her katana, and (cinder_character:1.2) conjuring fire, battle in a ruined city"
