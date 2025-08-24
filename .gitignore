@@ -1,6 +1,5 @@
 lora_env/
 writer_env/
-knowledge_db/
 logs/
 __pycache__/
 *.pyc

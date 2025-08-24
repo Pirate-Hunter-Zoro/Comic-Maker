@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --partition=c3_accel
-#SBATCH --job-name=lora_training_final
+#SBATCH --job-name=lora_training
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
@@ -10,30 +10,50 @@
 #SBATCH --output=logs/training-%J.stdout
 #SBATCH --error=logs/training-%J.stderr
 
-# --- The Final Ritual ---
-echo "The final ritual begins on $(hostname)."
-mkdir -p ~/Visual-Novel-Writer/logs
+# --- COMMAND VARIABLES (EDIT THESE) ---
+# The absolute path to your project's root directory.
+PROJECT_ROOT="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
+
+# The absolute path to your shared models and output parent directory.
+GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer"
+
+# The specific project you want to train a LoRA for.
+TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc"
+# --- END OF VARIABLES ---
+
+# --- Dynamic Path and Name Generation ---
+# Do not edit below this line.
+PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}")
+OUTPUT_NAME="${PROJECT_NAME}_LoRA"
+DATASET_CONFIG_FILE="${PROJECT_ROOT}/${TARGET_PROJECT_SUBPATH}/dataset_config.toml"
+OUTPUT_DIR="${GREAT_ARMORY_PATH}/${PROJECT_NAME}_LoRA_Output"
+
+# --- The Ritual Begins ---
+echo "The Forge awakens on $(hostname)."
+echo "Project Target: ${PROJECT_NAME}"
+
+mkdir -p "${PROJECT_ROOT}/logs"
 
 # Load system powers
 module load Python/3.11.5-GCCcore-13.2.0
 module load CUDA/12.3.0
 
 # Enter your sanctuary
-source ~/Visual-Novel-Writer/lora_env/bin/activate
+source "${PROJECT_ROOT}/lora_env/bin/activate"
 
 # Go to the beast's lair
-cd ~/Visual-Novel-Writer/kohya-trainer
+cd "${PROJECT_ROOT}/kohya-trainer"
 
-echo "Unleashing the direct command..."
+echo "Unleashing the forge command..."
 
-# This is the absolute, final command. All parameters are now direct arguments.
+# The command is now fully dynamic.
 accelerate launch train_network.py \
---pretrained_model_name_or_path="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/AnyLoRA" \
---dataset_config="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/dataset_config.toml" \
---output_dir="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/Multi_Concept_Output" \
---logging_dir="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/_logs" \
---output_name="RWBY_Fusion_LoRA" \
---log_prefix="RWBY_Fusion_LoRA" \
+--pretrained_model_name_or_path="${GREAT_ARMORY_PATH}/AnyLoRA" \
+--dataset_config="${DATASET_CONFIG_FILE}" \
+--output_dir="${OUTPUT_DIR}" \
+--logging_dir="${OUTPUT_DIR}/_logs" \
+--output_name="${OUTPUT_NAME}" \
+--log_prefix="${OUTPUT_NAME}" \
 --save_precision="fp16" \
 --mixed_precision="fp16" \
 --network_module=networks.lora \
@@ -50,11 +70,11 @@ accelerate launch train_network.py \
 --lr_warmup_steps=0 \
 --optimizer_type="AdamW8bit" \
 --save_every_n_steps=10000 \
---save_model_as="safetensors" \
+--save_model_as="safensors" \
 --clip_skip=2 \
 --seed=42 \
 --sdpa \
 --cache_latents \
 --no_half_vae
 
-echo "The ritual is complete."
+echo "The forging is complete."
