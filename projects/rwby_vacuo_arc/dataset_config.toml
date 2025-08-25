@@ -9,135 +9,104 @@ batch_size = 1
   # --- Batch 1 ---
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_blake'
-  class_token = 'blake belladonna style'
-  
+    
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_cinder'
-  class_token = 'cinder fall style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_coco'
-  class_token = 'coco adel style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_elm'
-  class_token = 'elm ederne style'
-  
+    
   # --- Batch 2 ---
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_emerald'
-  class_token = 'emerald sustrai style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_ghira'
-  class_token = 'ghira belladonna style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_glynda'
-  class_token = 'glynda goodwitch style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_harriet'
-  class_token = 'harriet bree style'
-
+  
   # --- Batch 3 ---
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_jaune'
-  class_token = 'jaune arc style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_kali'
-  class_token = 'kali belladonna style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_maria'
-  class_token = 'maria calavera style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_marrow'
-  class_token = 'marrow amin style'
-
+  
   # --- Batch 4 ---
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_mercury'
-  class_token = 'mercury black style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_neo'
-  class_token = 'neopolitan style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_neptune'
-  class_token = 'neptune vasilias style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_nora'
-  class_token = 'nora valkyrie style'
-
+  
   # --- Batch 5 ---
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_oobleck'
-  class_token = 'bartholomew oobleck style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_oscar'
-  class_token = 'oscar pine style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_peter'
-  class_token = 'peter port style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_qrow'
-  class_token = 'qrow branwen style'
-
+  
   # --- Batch 6 ---
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_raven'
-  class_token = 'raven branwen style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_ren'
-  class_token = 'lie ren style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_robyn'
-  class_token = 'robyn hill style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_ruby'
-  class_token = 'ruby rose style'
-
+  
   # --- Batch 7 ---
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_salem'
-  class_token = 'salem style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_sun'
-  class_token = 'sun wukong style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_taiyang'
-  class_token = 'taiyang xiao long style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_tyrian'
-  class_token = 'tyrian callows style'
-
+  
   # --- Batch 8 ---
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_velvet'
-  class_token = 'velvet scarlatina style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_weiss'
-  class_token = 'weiss schnee style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_winter'
-  class_token = 'winter schnee style'
-
+  
   [[datasets.subsets]]
   image_dir = '/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/projects/rwby_vacuo_arc/training_data/20_yang'
-  class_token = 'yang xiao long style'
+  
