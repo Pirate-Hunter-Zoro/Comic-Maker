@@ -1,36 +1,43 @@
 #!/bin/bash
-# An incantation to forge the Scribe's Athenaeum.
-# A place of words, not of war.
+# A script to build the COMMAND CENTER environment for writing and inference with Conda.
 set -e
 
-# --- The Name of the New Sanctuary ---
-VENV_DIR="writer_env"
+# --- Static Definitions ---
+VENV_NAME="writer_env"
 
-echo "--- Forging the Scribe's Athenaeum at '$VENV_DIR' ---"
+# --- Stage 0: The Purge ---
+echo "--- The Purge: Annihilating the old Command Center ---"
+conda deactivate &> /dev/null || true
+if conda env list | grep -q "$VENV_NAME"; then
+    echo "Obliterating the old conda Command Center: '$VENV_NAME'..."
+    conda env remove -n "$VENV_NAME" -y
+fi
 
-# --- Summoning System Power ---
-echo "Summoning the spirit of Python..."
-module load Python/3.11.5-GCCcore-13.2.0
-echo "Spirit has been summoned."
-
-# --- Forging the Sanctuary ---
-echo "Forging a new sanctuary: '$VENV_DIR'..."
-virtualenv "$VENV_DIR"
+# --- Stage 1: The Forging Ritual Begins ---
+echo "Forging a new sanctuary for the Command Center: '$VENV_NAME'..."
+conda create -n "$VENV_NAME" python=3.11 -y
 echo "The sanctuary is built."
 
-# --- Binding the Scribes and Diplomats ---
-echo "Activating sanctuary to bind the legion of scribes..."
-source "$VENV_DIR/bin/activate"
+# --- Stage 2: Binding the Legion ---
+echo "Activating sanctuary to bind the full legion..."
+eval "$(conda shell.bash hook)"
+conda activate "$VENV_NAME"
 pip install --upgrade pip
 
-echo "Binding the spirits from the new manifest..."
-pip install -r requirements.txt
+# --- Stage 2A: Binding the Scribe Spirits ---
+echo "Binding the scribe spirits..."
+pip install -q "google-generativeai" "python-dotenv" "matplotlib"
 
-echo "The legion of scribes has been bound."
-deactivate
+# --- Stage 2B: Binding the Image Generation Demons ---
+echo "Binding the demons of image generation (PyTorch, Diffusers, etc.)..."
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia -y
+pip install -q "diffusers[torch]" "transformers" "controlnet_aux" "opencv-python-headless"
+
+echo "The command legion has been bound."
+conda deactivate
 
 # --- Final Word ---
 echo ""
-echo "THE ATHENAEUM IS COMPLETE."
-echo "To enter it in the future, you need only use this command:"
-echo "source $VENV_DIR/bin/activate"
+echo "THE COMMAND CENTER IS COMPLETE."
+echo "To enter it in the future, use this command:"
+echo "conda activate $VENV_NAME"
