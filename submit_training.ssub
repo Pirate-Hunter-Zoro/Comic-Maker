@@ -12,25 +12,25 @@
 
 # --- COMMAND VARIABLES (EDIT THESE) ---
 # The absolute path to your project's root directory.
-PROJECT_ROOT="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer" [cite: 173]
+PROJECT_ROOT="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer" 
 
 # The absolute path to your shared models and output parent directory.
-GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer" [cite: 174]
+GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer" 
 
 # The specific project you want to train a LoRA for.
-TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc" [cite: 175]
+TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc" 
 # --- END OF VARIABLES ---
 
 # --- Dynamic Path and Name Generation ---
 # Do not edit below this line.
-PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}") [cite: 176]
+PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}") 
 OUTPUT_NAME="${PROJECT_NAME}_LoRA"
 DATASET_CONFIG_FILE="${PROJECT_ROOT}/${TARGET_PROJECT_SUBPATH}/dataset_config.toml"
 OUTPUT_DIR="${GREAT_ARMORY_PATH}/${PROJECT_NAME}_LoRA_Output"
 
 # --- The Ritual Begins ---
 echo "The Forge awakens on $(hostname)."
-echo "Project Target: ${PROJECT_NAME}" [cite: 177]
+echo "Project Target: ${PROJECT_NAME}" 
 
 mkdir -p "${PROJECT_ROOT}/logs"
 

@@ -12,27 +12,36 @@
 
 # --- COMMAND VARIABLES (EDIT THESE) ---
 # The absolute path to your project's root directory.
-PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer" [cite: 180]
+PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
 # The absolute path to your shared models and output parent directory.
-GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer" [cite: 181]
+GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer"
 
 # The specific project you want to generate an image for.
 TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc"
 
-# The final incantation for the image.
-# Note: You must manually include the LoRA trigger words defined in your config. [cite: 182]
-PROMPT="masterpiece, best quality, <lora:rwby_vacuo_arc_LoRA:0.8>, (ruby_style:1.1) with her scythe, dramatic" [cite: 183]
-NEGATIVE_PROMPT="worst quality, low quality, blurry, deformed, watermark, signature"
+# The creative part of the prompt. The LoRA invocation will be added automatically.
+# Use the trigger words defined in your project_config.json
+CREATIVE_PROMPT="(ruby_style:1.1) with her scythe, dramatic"
 
 # The prompt to generate a pose map if one isn't found in the project directory.
-# Leave empty ("") to require a pre-existing pose_map.png. [cite: 184]
+# Leave empty ("") to require a pre-existing pose_map.png.
 POSE_PROMPT="masterpiece, one figure in a dynamic battle stance, holding a scythe, simple background, full body shot"
 # --- END OF VARIABLES ---
 
+# --- Dynamic Generation ---
+# Do not edit below this line.
+PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}")
+LORA_NAME="${PROJECT_NAME}_LoRA"
+
+# The final incantation is now constructed dynamically.
+PROMPT="masterpiece, best quality, <lora:${LORA_NAME}:0.8>, ${CREATIVE_PROMPT}"
+NEGATIVE_PROMPT="worst quality, low quality, blurry, deformed, watermark, signature"
+# ---
 
 echo "--- Inference Ritual Initiated ---"
 echo "Host: $(hostname)"
 echo "Project: ${TARGET_PROJECT_SUBPATH}"
+echo "Prompt: ${PROMPT}"
 
 # Load system powers
 module load Python/3.11.5-GCCcore-13.2.0
