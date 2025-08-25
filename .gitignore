@@ -29,3 +29,5 @@ slurm_logs/
 venv/
 *.whl
 *.bak
+training_loss/
+test_images/

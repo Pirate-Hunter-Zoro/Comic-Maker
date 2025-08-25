@@ -76,11 +76,11 @@ def main(args):
     
     # Construct all paths dynamically
     lora_output_dir = armory_path / f"{project_name}_LoRA_Output"
-    final_image_dir = armory_path / f"{project_name}_Final_Images"
+    final_image_dir = project_path / "test_images" / f"{project_name}_Final_Images"
     base_model_path = armory_path / "AnyLoRA"
     controlnet_model_path = armory_path / "controlnet-model"
     controlnet_detector_path = armory_path / "controlnet-detector"
-    pose_map_file = project_path / "pose_map.png"
+    pose_map_file = project_path / "test_images" / f"{project_name}_Posemap_Images" / "pose_map.png"
     
     final_image_dir.mkdir(parents=True, exist_ok=True)
 
