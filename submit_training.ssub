@@ -74,6 +74,7 @@ accelerate launch train_network.py \
 --seed=42 \
 --sdpa \
 --cache_latents \
---no_half_vae
+--no_half_vae \
+--caption_extension=".txt"
 
 echo "The forging is complete."
