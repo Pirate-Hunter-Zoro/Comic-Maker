@@ -1,5 +1,6 @@
 #!/bin/bash
 # A script to build the COMMAND CENTER environment for writing and inference with Conda.
+# Final version with contamination wards and corrected install order.
 set -e
 
 # --- Static Definitions ---
@@ -19,19 +20,25 @@ conda create -n "$VENV_NAME" python=3.11 -y
 echo "The sanctuary is built."
 
 # --- Stage 2: Binding the Legion ---
-echo "Activating sanctuary to bind the full legion..."
+echo "Activating sanctuary and raising contamination wards..."
 eval "$(conda shell.bash hook)"
 conda activate "$VENV_NAME"
-pip install --upgrade pip
 
-# --- Stage 2A: Binding the Scribe Spirits ---
-echo "Binding the scribe spirits..."
-pip install -q "google-generativeai" "python-dotenv" "matplotlib"
+# This ward forbids pip from looking in ~/.local
+export PYTHONNOUSERSITE=1
 
-# --- Stage 2B: Binding the Image Generation Demons ---
+pip install --upgrade pip --no-user
+
+# --- Stage 2A: Binding the Image Generation Demons (MUST COME FIRST) ---
+# This installs torch, diffusers, and their dependencies like 'filelock'
+# which are required by the scribe spirits.
 echo "Binding the demons of image generation (PyTorch, Diffusers, etc.)..."
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia -y
-pip install -q "diffusers[torch]" "transformers" "controlnet_aux" "opencv-python-headless"
+pip install -q "diffusers[torch]" "transformers" "controlnet_aux" "opencv-python-headless" --no-user
+
+# --- Stage 2B: Binding the Scribe Spirits ---
+echo "Binding the scribe spirits..."
+pip install -q "google-generativeai" "python-dotenv" "matplotlib" --no-user
 
 echo "The command legion has been bound."
 conda deactivate
@@ -39,5 +46,4 @@ conda deactivate
 # --- Final Word ---
 echo ""
 echo "THE COMMAND CENTER IS COMPLETE."
-echo "To enter it in the future, use this command:"
-echo "conda activate $VENV_NAME"
+echo "Use this for writing, analysis, and image generation."
