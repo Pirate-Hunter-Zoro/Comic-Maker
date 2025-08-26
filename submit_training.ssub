@@ -11,41 +11,38 @@
 #SBATCH --error=logs/training-%J.stderr
 
 # --- COMMAND VARIABLES (EDIT THESE) ---
-# The absolute path to your project's root directory.
-PROJECT_ROOT="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
-
-# The absolute path to your shared models and output parent directory.
-GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer"
-
-# The specific project you want to train a LoRA for.
-TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc"
+PROJECT_ROOT="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer" 
+GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer" 
+TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc" 
 # --- END OF VARIABLES ---
 
 # --- Dynamic Path and Name Generation ---
-# Do not edit below this line.
-PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}")
-OUTPUT_NAME="${PROJECT_NAME}_LoRA"
-DATASET_CONFIG_FILE="${PROJECT_ROOT}/${TARGET_PROJECT_SUBPATH}/dataset_config.toml"
-OUTPUT_DIR="${GREAT_ARMORY_PATH}/${PROJECT_NAME}_LoRA_Output"
+PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}") 
+OUTPUT_NAME="${PROJECT_NAME}_LoRA" 
+DATASET_CONFIG_FILE="${PROJECT_ROOT}/${TARGET_PROJECT_SUBPATH}/dataset_config.toml" 
+OUTPUT_DIR="${GREAT_ARMORY_PATH}/${PROJECT_NAME}_LoRA_Output" 
 
 # --- The Ritual Begins ---
-echo "The Forge awakens on $(hostname)."
-echo "Project Target: ${PROJECT_NAME}"
-mkdir -p "${PROJECT_ROOT}/logs"
+echo "The Forge awakens on $(hostname)." 
+echo "Project Target: ${PROJECT_NAME}" 
+mkdir -p "${PROJECT_ROOT}/logs" 
 
-# Load system powers - .bashrc will handle conda init
-module load Python/3.11.5-GCCcore-13.2.0
-module load CUDA/12.3.0
+# Load system powers
+module load Python/3.11.5-GCCcore-13.2.0 
+module load CUDA/12.3.0 
 
-export PYTHONNOUSERSITE=1
+# This is the direct incantation to awaken Conda in a new shell.
+eval "$(conda shell.bash hook)"
+
+export PYTHONNOUSERSITE=1 
 
 # Enter your sanctuary
-conda activate lora_env
+conda activate lora_env 
 
 # Go to the beast's lair
-cd "${PROJECT_ROOT}/kohya-trainer"
+cd "${PROJECT_ROOT}/kohya-trainer" 
 
-echo "Unleashing the forge command..."
+echo "Unleashing the forge command..." 
 
 # The command is now fully dynamic.
 accelerate launch train_network.py \
@@ -76,6 +73,6 @@ accelerate launch train_network.py \
 --sdpa \
 --cache_latents \
 --no_half_vae \
---caption_extension=".txt"
+--caption_extension=".txt" 
 
 echo "The forging is complete."

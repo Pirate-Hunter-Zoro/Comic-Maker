@@ -10,7 +10,7 @@
 #SBATCH --output=logs/image_forge-%J.stdout
 #SBATCH --error=logs/image_forge-%J.stderr
 
-# This script is a hollow vessel. It receives all commands from an outside source.
+# This script is a hollow vessel. It receives all commands from an outside source. 
 # It expects arguments in this order:
 # $1: PROJECT_PATH (e.g., /path/to/Visual-Novel-Writer)
 # $2: GREAT_ARMORY_PATH
@@ -21,28 +21,31 @@
 # $7: SEED
 
 # --- Assign variables from arguments ---
-PROJECT_PATH="$1"
-GREAT_ARMORY_PATH="$2"
-TARGET_PROJECT_SUBPATH="$3"
-OUTPUT_IMAGE_PATH="$4"
-PROMPT="$5"
-NEGATIVE_PROMPT="$6"
-SEED="$7"
+PROJECT_PATH="$1" 
+GREAT_ARMORY_PATH="$2" 
+TARGET_PROJECT_SUBPATH="$3" 
+OUTPUT_IMAGE_PATH="$4" 
+PROMPT="$5" 
+NEGATIVE_PROMPT="$6" 
+SEED="$7" 
 
 # --- The Ritual Begins ---
-echo "--- Image Forge Ritual Initiated by Conductor ---"
-echo "Host: $(hostname)"
-echo "Project: ${TARGET_PROJECT_SUBPATH}"
-echo "Output Target: ${OUTPUT_IMAGE_PATH}"
+echo "--- Image Forge Ritual Initiated by Conductor ---" 
+echo "Host: $(hostname)" 
+echo "Project: ${TARGET_PROJECT_SUBPATH}" 
+echo "Output Target: ${OUTPUT_IMAGE_PATH}" 
 
-# Load system powers - .bashrc will handle conda init
-module load Python/3.11.5-GCCcore-13.2.0
-module load CUDA/12.3.0
+# Load system powers
+module load Python/3.11.5-GCCcore-13.2.0 
+module load CUDA/12.3.0 
 
-export PYTHONNOUSERSITE=1
+# This is the direct incantation to awaken Conda in a new shell.
+eval "$(conda shell.bash hook)"
+
+export PYTHONNOUSERSITE=1 
 
 # Enter the Command Center sanctuary
-conda activate writer_env
+conda activate writer_env 
 
 # Execute the command, passing all received arguments forward
 python "${PROJECT_PATH}/src/inference/image_forge.py" \
@@ -51,6 +54,6 @@ python "${PROJECT_PATH}/src/inference/image_forge.py" \
   --output_path "${OUTPUT_IMAGE_PATH}" \
   --prompt "${PROMPT}" \
   --negative_prompt "${NEGATIVE_PROMPT}" \
-  --seed "${SEED}"
+  --seed "${SEED}" 
 
 echo "--- Image Forge Ritual Complete ---"
