@@ -1,0 +1,57 @@
+#!/bin/bash
+#SBATCH --partition=c3_accel
+#SBATCH --job-name=image_forge
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=32000
+#SBATCH --gpus=1
+#SBATCH --time=00:15:00
+#SBATCH --output=logs/image_forge-%J.stdout
+#SBATCH --error=logs/image_forge-%J.stderr
+
+# This script is a hollow vessel. It receives all commands from an outside source.
+# It expects arguments in this order:
+# $1: PROJECT_PATH (e.g., /path/to/Visual-Novel-Writer)
+# $2: GREAT_ARMORY_PATH
+# $3: TARGET_PROJECT_SUBPATH (e.g., projects/rwby_vacuo_arc)
+# $4: OUTPUT_IMAGE_PATH
+# $5: PROMPT
+# $6: NEGATIVE_PROMPT
+# $7: SEED
+
+# --- Assign variables from arguments ---
+PROJECT_PATH="$1"
+GREAT_ARMORY_PATH="$2"
+TARGET_PROJECT_SUBPATH="$3"
+OUTPUT_IMAGE_PATH="$4"
+PROMPT="$5"
+NEGATIVE_PROMPT="$6"
+SEED="$7"
+
+# --- The Ritual Begins ---
+echo "--- Image Forge Ritual Initiated by Conductor ---"
+echo "Host: $(hostname)"
+echo "Project: ${TARGET_PROJECT_SUBPATH}"
+echo "Output Target: ${OUTPUT_IMAGE_PATH}"
+
+# Load system powers
+module load Python/3.11.5-GCCcore-13.2.0
+module load CUDA/12.3.0
+
+# Initialize Conda
+source /opt/apps/easybuild/software/Anaconda3/2025.06-0/etc/profile.d/conda.sh
+
+# Enter the Command Center sanctuary
+conda activate writer_env
+
+# Execute the command, passing all received arguments forward
+python3 "${PROJECT_PATH}/src/inference/image_forge.py" \
+  --project_path "${PROJECT_PATH}/${TARGET_PROJECT_SUBPATH}" \
+  --great_armory_path "${GREAT_ARMORY_PATH}" \
+  --output_path "${OUTPUT_IMAGE_PATH}" \
+  --prompt "${PROMPT}" \
+  --negative_prompt "${NEGATIVE_PROMPT}" \
+  --seed "${SEED}"
+
+echo "--- Image Forge Ritual Complete ---"
