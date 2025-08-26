@@ -11,29 +11,16 @@
 #SBATCH --error=logs/inference-%J.stderr
 
 # --- COMMAND VARIABLES (EDIT THESE) ---
-# The absolute path to your project's root directory.
 PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
-# The absolute path to your shared models and output parent directory.
 GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer"
-
-# The specific project you want to generate an image for.
 TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc"
-
-# The creative part of the prompt. The LoRA invocation will be added automatically.
-# Use the trigger words defined in your project_config.json
 CREATIVE_PROMPT="(ruby_style:1.1) with her scythe, dramatic"
-
-# The prompt to generate a pose map if one isn't found in the project directory.
-# Leave empty ("") to require a pre-existing pose_map.png.
 POSE_PROMPT="masterpiece, one figure in a dynamic battle stance, holding a scythe, simple background, full body shot"
 # --- END OF VARIABLES ---
 
 # --- Dynamic Generation ---
-# Do not edit below this line.
 PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}")
 LORA_NAME="${PROJECT_NAME}_LoRA"
-
-# The final incantation is now constructed dynamically.
 PROMPT="masterpiece, best quality, <lora:${LORA_NAME}:0.8>, ${CREATIVE_PROMPT}"
 NEGATIVE_PROMPT="worst quality, low quality, blurry, deformed, watermark, signature"
 # ---
@@ -41,20 +28,23 @@ NEGATIVE_PROMPT="worst quality, low quality, blurry, deformed, watermark, signat
 echo "--- Inference Ritual Initiated ---"
 echo "Host: $(hostname)"
 echo "Project: ${TARGET_PROJECT_SUBPATH}"
-echo "Prompt: ${PROMPT}"
 
 # Load system powers
 module load Python/3.11.5-GCCcore-13.2.0
 module load CUDA/12.3.0
 
-# Initialize Conda
-source /opt/apps/easybuild/software/Anaconda3/2025.06-0/etc/profile.d/conda.sh
+# Initialize Conda for the non-interactive job shell.
+eval "$(conda shell.bash hook)"
+
+# --- THE CORRECTION ---
+# Raise the ward against user-site contamination.
+export PYTHONNOUSERSITE=1
 
 # Enter your sanctuary
 conda activate writer_env
 
 # Execute the command
-python3 "${PROJECT_PATH}/src/inference/use_lora.py" \
+python "${PROJECT_PATH}/src/inference/use_lora.py" \
   --project_path "${PROJECT_PATH}/${TARGET_PROJECT_SUBPATH}" \
   --great_armory_path "${GREAT_ARMORY_PATH}" \
   --prompt "${PROMPT}" \
