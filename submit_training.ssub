@@ -45,7 +45,7 @@ cd "${PROJECT_ROOT}/kohya-trainer"
 echo "Unleashing the forge command..." 
 
 # The command is now fully dynamic.
-accelerate launch train_network.py \
+"$(conda info --base)/envs/lora_env/bin/python" -m accelerate.commands.launch train_network.py \
 --pretrained_model_name_or_path="${GREAT_ARMORY_PATH}/AnyLoRA" \
 --dataset_config="${DATASET_CONFIG_FILE}" \
 --output_dir="${OUTPUT_DIR}" \

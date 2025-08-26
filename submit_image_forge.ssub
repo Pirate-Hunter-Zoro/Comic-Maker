@@ -48,7 +48,7 @@ export PYTHONNOUSERSITE=1
 conda activate writer_env 
 
 # Execute the command, passing all received arguments forward
-python "${PROJECT_PATH}/src/inference/image_forge.py" \
+"$(conda info --base)/envs/writer_env/bin/python" "${PROJECT_PATH}/src/inference/image_forge.py" \
   --project_path "${PROJECT_PATH}/${TARGET_PROJECT_SUBPATH}" \
   --great_armory_path "${GREAT_ARMORY_PATH}" \
   --output_path "${OUTPUT_IMAGE_PATH}" \

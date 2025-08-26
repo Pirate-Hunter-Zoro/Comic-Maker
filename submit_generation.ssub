@@ -43,7 +43,7 @@ export PYTHONNOUSERSITE=1
 conda activate writer_env 
 
 # Execute the command
-python "${PROJECT_PATH}/src/inference/use_lora.py" \
+"$(conda info --base)/envs/writer_env/bin/python" "${PROJECT_PATH}/src/inference/use_lora.py" \
   --project_path "${PROJECT_PATH}/${TARGET_PROJECT_SUBPATH}" \
   --great_armory_path "${GREAT_ARMORY_PATH}" \
   --prompt "${PROMPT}" \
