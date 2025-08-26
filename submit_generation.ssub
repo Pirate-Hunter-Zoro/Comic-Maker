@@ -26,18 +26,14 @@ NEGATIVE_PROMPT="worst quality, low quality, blurry, deformed, watermark, signat
 # ---
 
 echo "--- Inference Ritual Initiated ---"
-echo "Host: $(hostname)"
-echo "Project: ${TARGET_PROJECT_SUBPATH}"
+echo "The Forge awakens on $(hostname)."
+echo "Project Target: ${PROJECT_NAME}"
+mkdir -p "${PROJECT_ROOT}/logs"
 
-# Load system powers
+# Load system powers - .bashrc will handle conda init
 module load Python/3.11.5-GCCcore-13.2.0
 module load CUDA/12.3.0
 
-# Initialize Conda for the non-interactive job shell.
-eval "$(conda shell.bash hook)"
-
-# --- THE CORRECTION ---
-# Raise the ward against user-site contamination.
 export PYTHONNOUSERSITE=1
 
 # Enter your sanctuary
