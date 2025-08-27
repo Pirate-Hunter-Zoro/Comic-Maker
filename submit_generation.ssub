@@ -43,6 +43,10 @@ export PYTHONNOUSERSITE=1
 # Enter sanctuary by its absolute path
 conda activate "${VENV_PATH}"
 
+echo "--- Verifying visibility of the LoRA directory from the compute node ---"
+ls -l /media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer/rwby_vacuo_arc_LoRA_Output
+echo "--- End Diagnostic ---"
+
 # Execute with absolute invocation
 "${VENV_PATH}/bin/python" "${PROJECT_PATH}/src/inference/use_lora.py" \
   --project_path "${PROJECT_PATH}/${TARGET_PROJECT_SUBPATH}" \
