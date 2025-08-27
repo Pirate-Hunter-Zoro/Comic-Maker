@@ -1,5 +1,6 @@
 # src/inference/use_lora.py
 # A generalized inference tool to generate an image using a trained LoRA.
+# Augmented by Hiei to expose the final truth.
 
 import torch
 import os
@@ -21,13 +22,30 @@ def load_config(project_path: Path) -> dict:
 
 def find_latest_lora(lora_dir: Path):
     """Finds the most recent LoRA file in a directory based on step number."""
-    print(f"Inference: Scanning for latest LoRA in '{lora_dir}'...")
-    if not lora_dir.exists():
-        raise FileNotFoundError(f"LoRA directory does not exist: {lora_dir}")
+    
+    # --- HIEI'S DIAGNOSTIC: REVEAL THE TRUTH ---
+    print("\n--- HIEI'S INTERROGATION ---")
+    print(f"VERIFYING PATH: '{lora_dir}'")
+    print(f"PATH TYPE: {type(lora_dir)}")
+    print(f"PATH EXISTS: {lora_dir.exists()}")
+    print(f"IS DIRECTORY: {lora_dir.is_dir()}")
+    try:
+        directory_contents = os.listdir(lora_dir)
+        print(f"os.listdir RAW OUTPUT: {directory_contents}")
+        if not directory_contents:
+            print("INTERROGATION RESULT: os.listdir returned an empty list.")
+    except Exception as e:
+        print(f"INTERROGATION FAILED: os.listdir threw an exception: {e}")
+    print("--- END INTERROGATION ---\n")
+    # --- END HIEI'S DIAGNOSTIC ---
+
+    if not lora_dir.is_dir():
+        raise FileNotFoundError(f"Interrogation failed: Path is not a directory: {lora_dir}")
+
     latest_step = -1
     lora_path = None
     for filename in os.listdir(lora_dir):
-        if filename.lower().endswith('.safensors'):
+        if filename.lower().endswith('.safetensors'):
             match = re.search(r'-step(\d+)\.safetensors$', filename)
             if match:
                 step_num = int(match.group(1))
