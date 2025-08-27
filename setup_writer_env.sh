@@ -1,28 +1,32 @@
 #!/bin/bash
 # A script to build the COMMAND CENTER environment for writing and inference with Conda.
 # Final version with contamination wards and corrected install order.
+# Re-forged by Hiei to be absolute and portable.
 set -e
 
 # --- Static Definitions ---
+PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
 VENV_NAME="writer_env"
+VENV_PATH="${PROJECT_PATH}/conda_envs/${VENV_NAME}"
 
 # --- Stage 0: The Purge ---
 echo "--- The Purge: Annihilating the old Command Center ---"
 conda deactivate &> /dev/null || true
-if conda env list | grep -q "$VENV_NAME"; then
-    echo "Obliterating the old conda Command Center: '$VENV_NAME'..."
-    conda env remove -n "$VENV_NAME" -y
+# Obliterate the old environment by its precise location
+if [ -d "$VENV_PATH" ]; then
+    echo "Obliterating the old conda Command Center at '$VENV_PATH'..."
+    conda env remove --prefix "$VENV_PATH" -y
 fi
 
 # --- Stage 1: The Forging Ritual Begins ---
-echo "Forging a new sanctuary for the Command Center: '$VENV_NAME'..."
-conda create -n "$VENV_NAME" python=3.11 -y
+echo "Forging a new sanctuary for the Command Center at: '$VENV_PATH'..."
+conda create --prefix "$VENV_PATH" python=3.11 -y
 echo "The sanctuary is built."
 
 # --- Stage 2: Binding the Legion ---
-echo "Activating sanctuary and raising contamination wards..."
+echo "Activating sanctuary by its true path and raising contamination wards..."
 eval "$(conda shell.bash hook)"
-conda activate "$VENV_NAME"
+conda activate "$VENV_PATH"
 
 # This ward forbids pip from looking in ~/.local
 export PYTHONNOUSERSITE=1
@@ -30,8 +34,6 @@ export PYTHONNOUSERSITE=1
 pip install --upgrade pip --no-user
 
 # --- Stage 2A: Binding the Image Generation Demons (MUST COME FIRST) ---
-# This installs torch, diffusers, and their dependencies like 'filelock'
-# which are required by other spirits.
 echo "Binding the demons of image generation (PyTorch, Diffusers, etc.)..."
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia -y
 pip install -q "diffusers[torch]" "transformers" "controlnet_aux" "opencv-python-headless" --no-user
@@ -46,4 +48,5 @@ conda deactivate
 # --- Final Word ---
 echo ""
 echo "THE COMMAND CENTER IS COMPLETE."
-echo "Use this for writing, analysis, and image generation."
+echo "To enter it, you must use its full path:"
+echo "conda activate $VENV_PATH"

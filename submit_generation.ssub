@@ -28,7 +28,7 @@ NEGATIVE_PROMPT="worst quality, low quality, blurry, deformed, watermark, signat
 echo "--- Inference Ritual Initiated ---" 
 echo "The Forge awakens on $(hostname)." 
 echo "Project Target: ${PROJECT_NAME}" 
-mkdir -p "${PROJECT_ROOT}/logs" 
+mkdir -p "${PROJECT_PATH}/logs"
 
 # Load system powers
 module load Python/3.11.5-GCCcore-13.2.0 

@@ -1,18 +1,21 @@
 #!/bin/bash
 # A script, re-forged by Hiei, to build your FORGE environment with Conda.
-# This version includes wards against user-site contamination.
+# This version includes wards against user-site contamination and is fully portable.
 set -e
 
 # --- Static Definitions ---
+PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
 VENV_NAME="lora_env"
+VENV_PATH="${PROJECT_PATH}/conda_envs/${VENV_NAME}"
 REPO_DIR="kohya-trainer"
 
 # --- Stage 0: The Purge ---
 echo "--- The Purge: Annihilating any previous attempt ---"
 conda deactivate &> /dev/null || true
-if conda env list | grep -q "$VENV_NAME"; then
-    echo "Obliterating the old conda forge: '$VENV_NAME'..."
-    conda env remove -n "$VENV_NAME" -y
+# Obliterate the old environment by its precise location
+if [ -d "$VENV_PATH" ]; then
+    echo "Obliterating the old conda forge at '$VENV_PATH'..."
+    conda env remove --prefix "$VENV_PATH" -y
 fi
 if [ -d "$HOME/.cache/pip" ]; then
     echo "Burning the tainted cache..."
@@ -25,14 +28,14 @@ echo ""
 echo "Hmph. Now, the ultimate forging ritual begins with Conda..."
 
 # --- Stage 2: Forging the Sanctuary ---
-echo "Forging a new sanctuary: '$VENV_NAME'..."
-conda create -n "$VENV_NAME" python=3.11 -y
+echo "Forging a new sanctuary at: '$VENV_PATH'..."
+conda create --prefix "$VENV_PATH" python=3.11 -y
 echo "The sanctuary is built."
 
 # --- Stage 3: Binding the Entire Legion ---
-echo "Activating sanctuary and raising contamination wards..."
+echo "Activating sanctuary by its true path and raising contamination wards..."
 eval "$(conda shell.bash hook)"
-conda activate "$VENV_NAME"
+conda activate "$VENV_PATH"
 
 # This ward forbids pip from looking in ~/.local
 export PYTHONNOUSERSITE=1
@@ -64,4 +67,4 @@ conda deactivate
 echo ""
 echo "THE FORGE IS COMPLETE."
 echo "To enter it in the future, you need only use this command:"
-echo "conda activate $VENV_NAME"
+echo "conda activate $VENV_PATH"
