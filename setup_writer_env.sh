@@ -36,7 +36,7 @@ pip install --upgrade pip --no-user
 # --- Stage 2A: Binding the Image Generation Demons (MUST COME FIRST) ---
 echo "Binding the demons of image generation (PyTorch, Diffusers, etc.)..."
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia -y
-pip install -q "diffusers[torch]" "transformers" "controlnet_aux" "opencv-python-headless" --no-user
+pip install -q "diffusers[torch]" "transformers" "controlnet_aux" "opencv-python-headless" "mediapipe" --no-user
 
 # --- Stage 2B: Binding the Scribe Spirits ---
 echo "Binding the scribe spirits..."
