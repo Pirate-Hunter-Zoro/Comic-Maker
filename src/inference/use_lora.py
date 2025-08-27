@@ -83,6 +83,7 @@ def main(args):
     pose_map_file = project_path / "test_images" / f"{project_name}_Posemap_Images" / "pose_map.png"
     
     final_image_dir.mkdir(parents=True, exist_ok=True)
+    pose_map_file.parent.mkdir(parents=True, exist_ok=True)
 
     print("Inference: Awakening OpenPose detector...")
     openpose_detector = OpenposeDetector.from_pretrained(str(controlnet_detector_path))
