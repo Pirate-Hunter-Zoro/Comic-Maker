@@ -11,41 +11,42 @@
 #SBATCH --error=logs/training-%J.stderr
 
 # --- COMMAND VARIABLES (EDIT THESE) ---
-PROJECT_ROOT="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer" 
-GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer" 
-TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc" 
+PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
+GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer"
+TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc"
 # --- END OF VARIABLES ---
 
 # --- Dynamic Path and Name Generation ---
-PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}") 
-OUTPUT_NAME="${PROJECT_NAME}_LoRA" 
-DATASET_CONFIG_FILE="${PROJECT_ROOT}/${TARGET_PROJECT_SUBPATH}/dataset_config.toml" 
-OUTPUT_DIR="${GREAT_ARMORY_PATH}/${PROJECT_NAME}_LoRA_Output" 
+PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}")
+OUTPUT_NAME="${PROJECT_NAME}_LoRA"
+DATASET_CONFIG_FILE="${PROJECT_PATH}/${TARGET_PROJECT_SUBPATH}/dataset_config.toml"
+OUTPUT_DIR="${GREAT_ARMORY_PATH}/${PROJECT_NAME}_LoRA_Output"
+VENV_PATH="${PROJECT_PATH}/conda_envs/lora_env"
 
 # --- The Ritual Begins ---
-echo "The Forge awakens on $(hostname)." 
-echo "Project Target: ${PROJECT_NAME}" 
-mkdir -p "${PROJECT_ROOT}/logs" 
+echo "The Forge awakens on $(hostname)."
+echo "Project Target: ${PROJECT_NAME}"
+mkdir -p "${PROJECT_PATH}/logs"
 
 # Load system powers
-module load Python/3.11.5-GCCcore-13.2.0 
-module load CUDA/12.3.0 
+module load Python/3.11.5-GCCcore-13.2.0
+module load CUDA/12.3.0
 
 # This is the direct incantation to awaken Conda in a new shell.
 eval "$(conda shell.bash hook)"
 
-export PYTHONNOUSERSITE=1 
+export PYTHONNOUSERSITE=1
 
-# Enter your sanctuary
-conda activate lora_env 
+# Enter sanctuary by its absolute path
+conda activate "${VENV_PATH}"
 
 # Go to the beast's lair
-cd "${PROJECT_ROOT}/kohya-trainer" 
+cd "${PROJECT_PATH}/kohya-trainer"
 
-echo "Unleashing the forge command..." 
+echo "Unleashing the forge command..."
 
-# The command is now fully dynamic.
-"$(conda info --base)/envs/lora_env/bin/python" -m accelerate.commands.launch train_network.py \
+# The command bound to its true location and spirit.
+"${VENV_PATH}/bin/python" -m accelerate.commands.launch train_network.py \
 --pretrained_model_name_or_path="${GREAT_ARMORY_PATH}/AnyLoRA" \
 --dataset_config="${DATASET_CONFIG_FILE}" \
 --output_dir="${OUTPUT_DIR}" \
@@ -73,6 +74,6 @@ echo "Unleashing the forge command..."
 --sdpa \
 --cache_latents \
 --no_half_vae \
---caption_extension=".txt" 
+--caption_extension=".txt"
 
 echo "The forging is complete."

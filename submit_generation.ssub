@@ -11,43 +11,44 @@
 #SBATCH --error=logs/inference-%J.stderr
 
 # --- COMMAND VARIABLES (EDIT THESE) ---
-PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer" 
-GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer" 
-TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc" 
-CREATIVE_PROMPT="(ruby_style:1.1) with her scythe, dramatic" 
-POSE_PROMPT="masterpiece, one figure in a dynamic battle stance, holding a scythe, simple background, full body shot" 
+PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
+GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer"
+TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc"
+CREATIVE_PROMPT="(ruby_style:1.1) with her scythe, dramatic"
+POSE_PROMPT="masterpiece, one figure in a dynamic battle stance, holding a scythe, simple background, full body shot"
 # --- END OF VARIABLES ---
 
 # --- Dynamic Generation ---
-PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}") 
-LORA_NAME="${PROJECT_NAME}_LoRA" 
-PROMPT="masterpiece, best quality, <lora:${LORA_NAME}:0.8>, ${CREATIVE_PROMPT}" 
-NEGATIVE_PROMPT="worst quality, low quality, blurry, deformed, watermark, signature" 
+PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}")
+LORA_NAME="${PROJECT_NAME}_LoRA"
+PROMPT="masterpiece, best quality, <lora:${LORA_NAME}:0.8>, ${CREATIVE_PROMPT}"
+NEGATIVE_PROMPT="worst quality, low quality, blurry, deformed, watermark, signature"
+VENV_PATH="${PROJECT_PATH}/conda_envs/writer_env"
 # ---
 
-echo "--- Inference Ritual Initiated ---" 
-echo "The Forge awakens on $(hostname)." 
-echo "Project Target: ${PROJECT_NAME}" 
+echo "--- Inference Ritual Initiated ---"
+echo "The Forge awakens on $(hostname)."
+echo "Project Target: ${PROJECT_NAME}"
 mkdir -p "${PROJECT_PATH}/logs"
 
 # Load system powers
-module load Python/3.11.5-GCCcore-13.2.0 
-module load CUDA/12.3.0 
+module load Python/3.11.5-GCCcore-13.2.0
+module load CUDA/12.3.0
 
 # This is the direct incantation to awaken Conda in a new shell.
 eval "$(conda shell.bash hook)"
 
-export PYTHONNOUSERSITE=1 
+export PYTHONNOUSERSITE=1
 
-# Enter your sanctuary
-conda activate writer_env 
+# Enter sanctuary by its absolute path
+conda activate "${VENV_PATH}"
 
-# Execute the command
-"$(conda info --base)/envs/writer_env/bin/python" "${PROJECT_PATH}/src/inference/use_lora.py" \
+# Execute with absolute invocation
+"${VENV_PATH}/bin/python" "${PROJECT_PATH}/src/inference/use_lora.py" \
   --project_path "${PROJECT_PATH}/${TARGET_PROJECT_SUBPATH}" \
   --great_armory_path "${GREAT_ARMORY_PATH}" \
   --prompt "${PROMPT}" \
   --negative_prompt "${NEGATIVE_PROMPT}" \
-  --pose_prompt "${POSE_PROMPT}" 
+  --pose_prompt "${POSE_PROMPT}"
 
 echo "--- Inference Ritual Complete ---"
