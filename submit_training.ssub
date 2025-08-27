@@ -61,9 +61,9 @@ echo "Unleashing the forge command..."
 --resolution=1024 \
 --train_batch_size=1 \
 --max_train_epochs=15 \
---learning_rate=2e-4 \
---unet_lr=2e-4 \
---text_encoder_lr=6e-5 \
+--learning_rate=5e-5 \
+--unet_lr=5e-5 \
+--text_encoder_lr=1e-5 \
 --lr_scheduler="cosine_with_restarts" \
 --lr_scheduler_num_cycles=4 \
 --lr_warmup_steps=0 \
