@@ -1,5 +1,5 @@
 {
-  "project_name": "RWBY: Vacuo Arc",
+  "project_name": "rwby_vacuo_arc",
   "universe_name": "RWBY",
   "model_names": {
     "planner": "gemini-2.5-pro",
