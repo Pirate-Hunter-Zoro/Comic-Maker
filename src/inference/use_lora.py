@@ -28,7 +28,7 @@ def find_latest_lora(lora_dir: Path):
     lora_path = None
     for filename in os.listdir(lora_dir):
         if filename.lower().endswith('.safensors'):
-            match = re.search(r'-(\d+)\.safensors$', filename)
+            match = re.search(r'-step(\d+)\.safetensors$', filename)
             if match:
                 step_num = int(match.group(1))
                 if step_num > latest_step:
