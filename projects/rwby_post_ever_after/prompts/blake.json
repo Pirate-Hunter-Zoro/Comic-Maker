@@ -1,0 +1,38 @@
+{
+    "global": {
+      "count": 320,
+      "steps": 28,
+      "cfg": 6.0,
+      "negatives": ["lowres", "blurry", "watermark", "extra limbs", "disfigured"],
+      "denoise_strengths": [0.35, 0.45, 0.55]
+    },
+    "buckets": {
+      "portrait": {
+        "weight": 0.5,
+        "prompts": [
+          "close-up, {char} with cat ears, soft studio lighting, crisp inks, halftone",
+          "portrait, {char}, subtle rim light, high fidelity anime"
+        ],
+        "negatives": ["overexposed"],
+        "size": [768, 1024]
+      },
+      "action": {
+        "weight": 0.35,
+        "prompts": [
+          "dynamic action panel, {char}, dramatic lighting, motion lines",
+          "full body, {char} mid-leap, smoky background, comic shading"
+        ],
+        "size": [1024, 1024],
+        "denoise_strengths": [0.45, 0.55, 0.65]
+      },
+      "wide": {
+        "weight": 0.15,
+        "prompts": [
+          "wide panel, {char} small figure in vast ruined city, cinematic composition",
+          "two-shot, {char} with teammate, dramatic skyline, crisp lineart"
+        ],
+        "size": [1216, 832]
+      }
+    }
+  }
+  

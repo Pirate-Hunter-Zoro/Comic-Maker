@@ -1,79 +1,70 @@
 #!/bin/bash
 #SBATCH --partition=c3_accel
-#SBATCH --job-name=lora_training
+#SBATCH --job-name=${CHAR}_lora
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=48000
 #SBATCH --gpus=1
 #SBATCH --time=24:00:00
-#SBATCH --output=logs/training-%J.stdout
-#SBATCH --error=logs/training-%J.stderr
+#SBATCH --output=logs/%x-%J.stdout
+#SBATCH --error=logs/%x-%J.stderr
 
-# --- COMMAND VARIABLES (EDIT THESE) ---
-PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
-GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer"
-TARGET_PROJECT_SUBPATH="projects/rwby_post_ever_after"
-# --- END OF VARIABLES ---
+# ======= Required ENV (export before sbatch or pass with --export) =======
+# CHAR=blake
+# UNIVERSE=rwby_post_ever_after
+# BASE=runwayml/stable-diffusion-v1-5
+# PROJECT_ROOT=/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/Comic-Maker
+# LORA_ENV=${PROJECT_ROOT}/conda_envs/lora_env
+# OUT_ROOT=/media/studies/ehr_study/data-EHR-prepped/Comic-Maker/loras   # cluster storage
 
-# --- Dynamic Path and Name Generation ---
-PROJECT_NAME=$(basename "${TARGET_PROJECT_SUBPATH}")
-OUTPUT_NAME="${PROJECT_NAME}_LoRA"
-DATASET_CONFIG_FILE="${PROJECT_PATH}/${TARGET_PROJECT_SUBPATH}/dataset_config.toml"
-OUTPUT_DIR="${GREAT_ARMORY_PATH}/${PROJECT_NAME}_LoRA_Output"
-VENV_PATH="${PROJECT_PATH}/conda_envs/lora_env"
+# Optional hyperparams with sane defaults
+NETWORK_DIM=${NETWORK_DIM:-16}
+NETWORK_ALPHA=${NETWORK_ALPHA:-16}
+MAX_STEPS=${MAX_STEPS:-8000}
+LR=${LR:-1e-4}
+BS=${BS:-2}
 
-# --- The Ritual Begins ---
-echo "The Forge awakens on $(hostname)."
-echo "Project Target: ${PROJECT_NAME}"
-mkdir -p "${PROJECT_PATH}/logs"
+set -euo pipefail
 
-# Load system powers
-module load Python/3.11.5-GCCcore-13.2.0
-module load CUDA/12.3.0
+echo "CHAR=${CHAR:-unset}  UNIVERSE=${UNIVERSE:-unset}"
+echo "BASE=${BASE:-unset}"
+echo "PROJECT_ROOT=${PROJECT_ROOT:-unset}"
+echo "LORA_ENV=${LORA_ENV:-unset}"
+echo "OUT_ROOT=${OUT_ROOT:-unset}"
 
-# This is the direct incantation to awaken Conda in a new shell.
-eval "$(conda shell.bash hook)"
+# Derived paths
+DATA_CONFIG="${PROJECT_ROOT}/projects/${UNIVERSE}/configs/${CHAR}_dataset.config"
+OUT_DIR="${OUT_ROOT}/${UNIVERSE}/${CHAR}"
+RUN_NAME="${CHAR}_lora_v1"
 
-export PYTHONNOUSERSITE=1
+mkdir -p "$(dirname "$OUT_DIR")" logs
 
-# Enter sanctuary by its absolute path
-conda activate "${VENV_PATH}"
+# Activate env
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate "$LORA_ENV"
 
-# Go to the beast's lair
-cd "${PROJECT_PATH}/kohya-trainer"
+# Train
+python "${PROJECT_ROOT}/kohya-trainer/train_network.py" \
+  --pretrained_model_name_or_path "$BASE" \
+  --network_module "networks.lora" \
+  --network_dim "$NETWORK_DIM" \
+  --network_alpha "$NETWORK_ALPHA" \
+  --output_dir "$OUT_DIR" \
+  --output_name "$RUN_NAME" \
+  --dataset_config "$DATA_CONFIG" \
+  --max_train_steps "$MAX_STEPS" \
+  --learning_rate "$LR" \
+  --optimizer_type "adamw8bit" \
+  --network_train_unet_only \
+  --lr_scheduler "cosine" \
+  --lr_warmup_steps 100 \
+  --mixed_precision "fp16" \
+  --save_every_n_steps 1000 \
+  --save_precision "fp16" \
+  --clip_skip 2 \
+  --min_snr_gamma 5.0 \
+  --persistent_data_loader_workers \
+  --train_batch_size "$BS"
 
-echo "Unleashing the forge command..."
-
-# The command bound to its true location and spirit.
-"${VENV_PATH}/bin/python" -m accelerate.commands.launch train_network.py \
---pretrained_model_name_or_path="${GREAT_ARMORY_PATH}/AnyLoRA" \
---dataset_config="${DATASET_CONFIG_FILE}" \
---output_dir="${OUTPUT_DIR}" \
---logging_dir="${OUTPUT_DIR}/_logs" \
---output_name="${OUTPUT_NAME}" \
---log_prefix="${OUTPUT_NAME}" \
---save_precision="fp16" \
---mixed_precision="fp16" \
---network_module=networks.lora \
---network_dim=1024 \
---network_alpha=512 \
---resolution=1024 \
---train_batch_size=1 \
---max_train_epochs=15 \
---learning_rate=5e-5 \
---unet_lr=5e-5 \
---text_encoder_lr=1e-5 \
---lr_scheduler="cosine_with_restarts" \
---lr_scheduler_num_cycles=4 \
---lr_warmup_steps=0 \
---optimizer_type="AdamW8bit" \
---save_every_n_steps=10000 \
---clip_skip=2 \
---seed=42 \
---sdpa \
---cache_latents \
---no_half_vae \
---caption_extension=".txt"
-
-echo "The forging is complete."
+echo "Training complete. Weights in: $OUT_DIR"

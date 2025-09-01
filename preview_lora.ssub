@@ -1,0 +1,49 @@
+#!/bin/bash
+#SBATCH --partition=c3_accel
+#SBATCH --job-name=preview_${CHAR}
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=16000
+#SBATCH --gpus=1
+#SBATCH --time=02:00:00
+#SBATCH --output=logs/%x-%J.stdout
+#SBATCH --error=logs/%x-%J.stderr
+
+# ======= Required ENV =======
+# CHAR=blake
+# UNIVERSE=rwby_post_ever_after
+# BASE=runwayml/stable-diffusion-v1-5
+# PROJECT_ROOT=/home/.../Comic-Maker
+# DRAWER_ENV=${PROJECT_ROOT}/conda_envs/drawer_env
+# OUT_ROOT=/media/studies/ehr_study/data-EHR-prepped/Comic-Maker/loras
+
+# Optional preview params
+: "${STEPS:=28}"; : "${CFG:=6.0}"
+: "${W:=768}"; : "${H:=1024}"; : "${SEED:=1234}"
+: "${IMAGES:=4}"
+: "${PROMPT:=anime cat-eared girl with short black hair and amber eyes, action panel, crisp lineart, halftone shading}"
+: "${NEG:=blurry, lowres, watermark, extra limbs}"
+
+set -euo pipefail
+
+LORA_PATH="${OUT_ROOT}/${UNIVERSE}/${CHAR}/${CHAR}_lora_v1.safetensors"
+OUTDIR="${PROJECT_ROOT}/projects/${UNIVERSE}/data/plots/${CHAR}_preview"
+
+mkdir -p "$OUTDIR" logs
+
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate "$DRAWER_ENV"
+
+python "${PROJECT_ROOT}/scripts/draw_with_lora.py" \
+  --base "$BASE" \
+  --lora "$LORA_PATH" \
+  --lora-scale 0.8 \
+  --prompt "$PROMPT" \
+  --neg "$NEG" \
+  --steps "$STEPS" --cfg "$CFG" \
+  --width "$W" --height "$H" \
+  --seed "$SEED" --images "$IMAGES" \
+  --outdir "$OUTDIR"
+
+echo "Preview images written to: $OUTDIR"

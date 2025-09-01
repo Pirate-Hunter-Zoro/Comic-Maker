@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # --- Static Definitions ---
-PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
+PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Comic-Maker"
 VENV_NAME="drawer_env"
 VENV_PATH="${PROJECT_PATH}/conda_envs/${VENV_NAME}"
 

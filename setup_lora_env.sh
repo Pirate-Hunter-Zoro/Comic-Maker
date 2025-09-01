@@ -1,10 +1,9 @@
 #!/bin/bash
-# A script, re-forged by Hiei, to build your FORGE environment with Conda.
 # This version includes wards against user-site contamination and is fully portable.
 set -e
 
 # --- Static Definitions ---
-PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
+PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Comic-Maker"
 VENV_NAME="lora_env"
 VENV_PATH="${PROJECT_PATH}/conda_envs/${VENV_NAME}"
 REPO_DIR="kohya-trainer"
