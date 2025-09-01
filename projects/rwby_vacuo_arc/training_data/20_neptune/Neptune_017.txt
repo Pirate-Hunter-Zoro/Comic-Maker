@@ -1,1 +1,0 @@
-neptune_character, neptune_rwby_character,cyan_hair,light_blue_eyes,red_cardigan,black_pants,black_boots,grey_gloves,long_staff_weapon, smirk

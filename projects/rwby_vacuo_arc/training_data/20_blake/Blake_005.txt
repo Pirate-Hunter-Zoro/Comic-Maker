@@ -1,1 +1,0 @@
-blake_character, blake_rwby_character,black_hair,red_eyes,black_clothing,red_accents,twin_katanas,cat_ears,faunus

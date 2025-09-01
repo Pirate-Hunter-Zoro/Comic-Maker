@@ -1,1 +1,0 @@
-tyrian_character, tyrian_rwby_character,brown_hair,yellow_eyes,white_clothing,brown_straps,muscular_build,scars,no_weapon_visible

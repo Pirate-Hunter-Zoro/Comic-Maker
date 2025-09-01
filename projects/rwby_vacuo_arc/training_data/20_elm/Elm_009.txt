@@ -1,1 +1,0 @@
-elm_character, elm_rwby_character,brown hair,brown eyes,white jacket,dark gray undershirt,red belt,gray pants,dark gray arm guard, ponytail

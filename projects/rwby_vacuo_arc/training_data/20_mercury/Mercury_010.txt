@@ -1,1 +1,0 @@
-mercury_character, mercury_rwby_character,gray_hair,silver_hair,grey_eyes,black_jacket,gray_shirt,black_pants,black_boots,metal_arm_guard,no_weapon_visible

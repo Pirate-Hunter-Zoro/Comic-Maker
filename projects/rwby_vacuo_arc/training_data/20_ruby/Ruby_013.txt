@@ -1,1 +1,0 @@
-ruby_character, ruby_rwby_character,long_brown_hair,red_eyes,red_and_cream_clothing,high_collared_jacket,cape,large_red_weapon,high_heels,anime_style

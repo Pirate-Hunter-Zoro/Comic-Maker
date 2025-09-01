@@ -1,1 +1,0 @@
-elm_character, elm_rwby_character,brown_hair,brown_eyes,white_pants,white_jacket,grey_arm_guards,red_belt,dark_grey_corset

@@ -1,1 +1,0 @@
-glynda_character, glynda_rwby_character,blonde_hair,green_eyes,black_dress,white_blouse,black_boots,riding_crop,teacher,serious_expression

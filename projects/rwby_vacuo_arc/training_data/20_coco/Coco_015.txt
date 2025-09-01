@@ -1,1 +1,0 @@
-coco_character, coco_rwby_character,red hair,brown eyes,brown jacket,brown pants,brown boots,belt,scarf,handbag,steampunk style

@@ -1,1 +1,0 @@
-tyrian_character, tyrian_rwby_character,dark_hair,yellow_eyes,white_pants,black_vest,brown_sleeves,black_boots,scorpion_tail,faunus,clawed_gauntlets

@@ -1,1 +1,0 @@
-neptune_character, neptune_rwby_character,light_blue_hair,blue_eyes,tan_skin,goggles,white_shirt,smiling

@@ -1,1 +1,0 @@
-cinder_character, cinder_rwby_character,red_dress,black_hair,red_eyes,high_heels,gold_embellishments,fire_effects,long_sleeves,flowing_dress

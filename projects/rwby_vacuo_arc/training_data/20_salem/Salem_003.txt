@@ -1,1 +1,0 @@
-salem_character, salem_rwby_character,pale_skin,silver_hair,red_eyes,black_dress,red_cape,long_sleeves,long_gown,no_weapon_visible

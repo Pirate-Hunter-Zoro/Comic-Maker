@@ -1,1 +1,0 @@
-cinder_character, cinder_rwby_character,brown_hair,red_eyes,black_clothing,eye_patch,gold_accents,short_hair

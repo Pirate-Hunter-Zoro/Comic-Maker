@@ -1,1 +1,0 @@
-emerald_character, emerald_rwby_character,mint_green_hair,red_eyes,brown_skin,white_jacket,black_collar,white_pants,brown_belt

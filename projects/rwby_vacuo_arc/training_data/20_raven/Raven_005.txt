@@ -1,1 +1,0 @@
-raven_character, raven_rwby_character,long_black_hair,red_eyes,red_and_black_clothing,red_armor,dark_red_kimono,short_dark_skirt,katana
