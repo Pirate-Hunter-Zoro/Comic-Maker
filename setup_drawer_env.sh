@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Minimal env for USING LoRAs (diffusers img2img, synth generation, previews)
+# OPTION B: keep xformers by satisfying Triton + setuptools inside the env
 set -euo pipefail
 
 # Resolve repo root (directory containing this script)
@@ -27,7 +28,7 @@ conda activate "${ENV_PATH}"
 echo "--- Installing PyTorch CUDA 12.1 ---"
 conda install -y -c pytorch -c nvidia pytorch torchvision torchaudio pytorch-cuda=12.1
 
-echo "--- Installing Python deps ---"
+echo "--- Installing core Python deps (diffusers stack) ---"
 python -m pip install --upgrade pip
 python -m pip install \
   diffusers==0.31.0 \
@@ -36,22 +37,34 @@ python -m pip install \
   safetensors==0.5.3 \
   pillow==11.2.1
 
-# Optional: xformers (ignore if wheel not available for your CUDA/PyTorch combo)
-python - <<'PY'
-try:
-  import subprocess, sys
-  subprocess.check_call([sys.executable, "-m", "pip", "install", "xformers==0.0.28.post3"])
-  print("xformers installed")
-except Exception as e:
-  print("xformers skipped:", e)
-PY
+echo "--- OPTION B: satisfy Triton/xformers toolchain INSIDE env ---"
+# Keep build tooling internal to env (avoid ~/.local interference)
+python -m pip install "setuptools<75" wheel jaraco.functools
 
-echo "--- Verify core imports ---"
+# Pin a Triton that works with CUDA 12.x + recent PyTorch
+python -m pip install triton==2.2.0
+
+# Install xformers after Triton is present
+python -m pip install xformers==0.0.28.post3
+
+echo "--- Verify core imports (avoid user-site during test) ---"
+export PYTHONNOUSERSITE=1
 python - <<'PY'
+import sys, pkgutil
 import torch, PIL, diffusers, transformers, accelerate, safetensors
 print("torch", torch.__version__, "CUDA", torch.version.cuda, "cuda?", torch.cuda.is_available())
 print("PIL OK:", hasattr(PIL, "__version__"))
 print("diffusers:", diffusers.__version__, "transformers:", transformers.__version__)
+# Verify Triton/xformers
+try:
+    import triton, xformers
+    print("triton:", getattr(triton, "__version__", "unknown"))
+    print("xformers:", getattr(xformers, "__version__", "unknown"))
+    # Sanity: ensure they came from the env, not ~/.local
+    print("triton path:", triton.__file__)
+    print("xformers path:", xformers.__file__)
+except Exception as e:
+    print("Triton/xformers import issue:", e)
 PY
 
 conda deactivate
