@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # ====== EDIT DEFAULTS OR PASS AS ENVs ======
-: "${PROJECT_ROOT:=/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/Comic-Maker}"
+: "${PROJECT_ROOT:=/home/librad.laureateinstitute.org/mferguson/Comic-Maker}"
 : "${UNIVERSE:=rwby_post_ever_after}"
 : "${CHAR:=blake}"
 

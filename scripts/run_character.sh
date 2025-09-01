@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # ====== EDIT THESE DEFAULTS OR PASS AS ENVs ======
-: "${PROJECT_ROOT:=/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer/Comic-Maker}"
+: "${PROJECT_ROOT:=/home/librad.laureateinstitute.org/mferguson/Comic-Maker}"
 : "${DRAWER_ENV:=${PROJECT_ROOT}/conda_envs/drawer_env}"
 : "${LORA_ENV:=${PROJECT_ROOT}/conda_envs/lora_env}"
 : "${UNIVERSE:=rwby_post_ever_after}"
