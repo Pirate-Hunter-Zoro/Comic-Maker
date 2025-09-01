@@ -1,5 +1,5 @@
 lora_env/
-writer_env/
+drawer_env/
 logs/
 __pycache__/
 *.pyc

@@ -6,7 +6,7 @@ set -e
 
 # --- Static Definitions ---
 PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
-VENV_NAME="writer_env"
+VENV_NAME="drawer_env"
 VENV_PATH="${PROJECT_PATH}/conda_envs/${VENV_NAME}"
 
 # --- Stage 0: The Purge ---

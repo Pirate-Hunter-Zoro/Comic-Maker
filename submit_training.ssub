@@ -13,7 +13,7 @@
 # --- COMMAND VARIABLES (EDIT THESE) ---
 PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Visual-Novel-Writer"
 GREAT_ARMORY_PATH="/media/studies/ehr_study/data-EHR-prepped/Mikey-Lora-Trainer"
-TARGET_PROJECT_SUBPATH="projects/rwby_vacuo_arc"
+TARGET_PROJECT_SUBPATH="projects/rwby_post_ever_after"
 # --- END OF VARIABLES ---
 
 # --- Dynamic Path and Name Generation ---
