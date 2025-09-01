@@ -1,62 +1,58 @@
-#!/bin/bash
-# Minimal environment for USING LoRA models with Diffusers + PyTorch + xformers
-# (no mediapipe, no google junk—just image gen)
+#!/usr/bin/env bash
+# Minimal env for USING LoRAs (diffusers img2img, synth generation, previews)
 set -euo pipefail
 
-# --- Static Definitions ---
-PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Comic-Maker"
-VENV_NAME="drawer_env"
-VENV_PATH="${PROJECT_PATH}/conda_envs/${VENV_NAME}"
+# Resolve repo root (directory containing this script)
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR" && pwd)"
+ENV_PATH="${PROJECT_ROOT}/conda_envs/drawer_env"
 
-echo "--- Nuking any old drawer env ---"
+echo "Repo root: ${PROJECT_ROOT}"
+echo "Env path:  ${ENV_PATH}"
+
+# Fresh env
 conda deactivate &>/dev/null || true
-if [[ -d "$VENV_PATH" ]]; then
-  echo "Removing old env at '$VENV_PATH'..."
-  conda env remove --prefix "$VENV_PATH" -y
+if [[ -d "${ENV_PATH}" ]]; then
+  echo "--- Removing old drawer_env ---"
+  conda env remove --prefix "${ENV_PATH}" -y
 fi
 
-echo "Creating new env at: '$VENV_PATH'..."
-conda create --prefix "$VENV_PATH" python=3.11 -y
-echo "Base env created."
+echo "--- Creating conda env (py311) ---"
+conda create --prefix "${ENV_PATH}" -y python=3.11
 
-# Activate & block user-site contamination
-eval "$(conda shell.bash hook)"
-conda activate "$VENV_PATH"
-export PYTHONNOUSERSITE=1
-unset PYTHONPATH || true
+# Activate
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate "${ENV_PATH}"
 
-echo "Upgrading pip..."
-python -m pip install --upgrade pip
-
-echo "Installing PyTorch (CUDA 12.1) via conda..."
+echo "--- Installing PyTorch CUDA 12.1 ---"
 conda install -y -c pytorch -c nvidia pytorch torchvision torchaudio pytorch-cuda=12.1
 
-echo "Installing minimal runtime packages (diffusers, transformers, etc.)..."
-pip install -q \
-  "diffusers>=0.28" \
-  "transformers>=4.44" \
-  safetensors \
-  accelerate \
-  pillow
+echo "--- Installing Python deps ---"
+python -m pip install --upgrade pip
+python -m pip install \
+  diffusers==0.31.0 \
+  transformers==4.52.4 \
+  accelerate==1.7.0 \
+  safetensors==0.5.3 \
+  pillow==11.2.1
 
-echo "Attempting to install xformers (optional speedup)..."
-if pip install -q xformers; then
-  echo "xformers installed."
-else
-  echo "xformers wheel not available for this setup; skipping gracefully."
-fi
-
-echo "Verifying core stack..."
+# Optional: xformers (ignore if wheel not available for your CUDA/PyTorch combo)
 python - <<'PY'
-import torch, pkgutil
-print("torch:", torch.__version__, "cuda:", torch.version.cuda, "CUDA available:", torch.cuda.is_available())
-print("device_count:", torch.cuda.device_count())
-for p in ["diffusers","transformers","safetensors","accelerate","PIL","xformers"]:
-    print(f"{p}:","OK" if pkgutil.find_loader(p if p!="PIL" else "PIL.Image") else "MISSING")
+try:
+  import subprocess, sys
+  subprocess.check_call([sys.executable, "-m", "pip", "install", "xformers==0.0.28.post3"])
+  print("xformers installed")
+except Exception as e:
+  print("xformers skipped:", e)
+PY
+
+echo "--- Verify core imports ---"
+python - <<'PY'
+import torch, PIL, diffusers, transformers, accelerate, safetensors
+print("torch", torch.__version__, "CUDA", torch.version.cuda, "cuda?", torch.cuda.is_available())
+print("PIL OK:", hasattr(PIL, "__version__"))
+print("diffusers:", diffusers.__version__, "transformers:", transformers.__version__)
 PY
 
 conda deactivate
-echo
-echo "DRAWER ENV COMPLETE."
-echo "Activate with:"
-echo "  conda activate $VENV_PATH"
+echo "DONE. Activate with: conda activate ${ENV_PATH}"

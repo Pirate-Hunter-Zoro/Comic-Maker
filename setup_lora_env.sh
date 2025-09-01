@@ -1,69 +1,58 @@
-#!/bin/bash
-# This version includes wards against user-site contamination and is fully portable.
-set -e
+#!/usr/bin/env bash
+# Env for TRAINING LoRAs (kohya-trainer)
+set -euo pipefail
 
-# --- Static Definitions ---
-PROJECT_PATH="/home/librad.laureateinstitute.org/mferguson/Comic-Maker"
-VENV_NAME="lora_env"
-VENV_PATH="${PROJECT_PATH}/conda_envs/${VENV_NAME}"
-REPO_DIR="kohya-trainer"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR" && pwd)"
+ENV_PATH="${PROJECT_ROOT}/conda_envs/lora_env"
+KOHYA_DIR="${PROJECT_ROOT}/kohya-trainer"
 
-# --- Stage 0: The Purge ---
-echo "--- The Purge: Annihilating any previous attempt ---"
-conda deactivate &> /dev/null || true
-# Obliterate the old environment by its precise location
-if [ -d "$VENV_PATH" ]; then
-    echo "Obliterating the old conda forge at '$VENV_PATH'..."
-    conda env remove --prefix "$VENV_PATH" -y
+echo "Repo root: ${PROJECT_ROOT}"
+echo "Env path:  ${ENV_PATH}"
+echo "Kohya dir: ${KOHYA_DIR}"
+
+conda deactivate &>/dev/null || true
+if [[ -d "${ENV_PATH}" ]]; then
+  echo "--- Removing old lora_env ---"
+  conda env remove --prefix "${ENV_PATH}" -y
 fi
-if [ -d "$HOME/.cache/pip" ]; then
-    echo "Burning the tainted cache..."
-    rm -rf "$HOME/.cache/pip"
+
+echo "--- Creating conda env (py310) ---"
+conda create --prefix "${ENV_PATH}" -y python=3.10
+
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate "${ENV_PATH}"
+
+echo "--- Installing PyTorch CUDA 12.1 ---"
+conda install -y -c pytorch -c nvidia pytorch torchvision torchaudio pytorch-cuda=12.1
+
+echo "--- Installing kohya dependencies (minimal/safe) ---"
+python -m pip install --upgrade pip
+python -m pip install \
+  "numpy<2" \
+  safetensors==0.5.3 \
+  accelerate==1.7.0 \
+  transformers==4.52.4 \
+  bitsandbytes==0.42.0 \
+  Pillow==10.4.0 \
+  peft==0.13.2 \
+  tqdm==4.67.1 \
+  datasets==3.1.0 \
+  toml==0.10.2
+
+# Install local kohya repo in editable mode
+if [[ -d "${KOHYA_DIR}" ]]; then
+  python -m pip install -e "${KOHYA_DIR}"
+else
+  echo "WARNING: ${KOHYA_DIR} not found. Skip kohya install."
 fi
-echo "The ground has been salted."
 
-# --- Stage 1: The Forging Ritual Begins ---
-echo ""
-echo "Hmph. Now, the ultimate forging ritual begins with Conda..."
+echo "--- Verify core imports ---"
+python - <<'PY'
+import torch, safetensors, accelerate, transformers, PIL, bitsandbytes, peft
+print("torch", torch.__version__, "CUDA", torch.version.cuda, "cuda?", torch.cuda.is_available())
+print("safetensors/accelerate/transformers OK")
+PY
 
-# --- Stage 2: Forging the Sanctuary ---
-echo "Forging a new sanctuary at: '$VENV_PATH'..."
-conda create --prefix "$VENV_PATH" python=3.11 -y
-echo "The sanctuary is built."
-
-# --- Stage 3: Binding the Entire Legion ---
-echo "Activating sanctuary by its true path and raising contamination wards..."
-eval "$(conda shell.bash hook)"
-conda activate "$VENV_PATH"
-
-# This ward forbids pip from looking in ~/.local
-export PYTHONNOUSERSITE=1
-
-pip install --upgrade pip --no-user
-
-# --- Stage 3A: Pre-binding the Master Tool-Spirits ---
-echo "Pre-binding the master tool-spirits to prevent paradox..."
-pip install -q setuptools wheel --no-user
-
-# --- Stage 3B: Binding the Core Demons by True Name ---
-echo "Binding the core demons (PyTorch, torchvision, torchaudio) via Conda..."
-conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia -y
-
-# --- Stage 3C: Subjugating the NumPy Spirit ---
-echo "Subjugating the NumPy spirit to its old form..."
-pip install -q "numpy<2" --no-user
-
-# --- Stage 3D: Binding the Lesser Spirits ---
-echo "Binding the lesser demons via the master's manifest..."
-cd "$REPO_DIR"
-pip install -r requirements.txt --no-user
-cd ..
-
-echo "The entire legion has been bound to your will."
 conda deactivate
-
-# --- Final Word ---
-echo ""
-echo "THE FORGE IS COMPLETE."
-echo "To enter it in the future, you need only use this command:"
-echo "conda activate $VENV_PATH"
+echo "DONE. Activate with: conda activate ${ENV_PATH}"
