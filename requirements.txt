@@ -86,7 +86,7 @@ pillow==11.2.1
 prompt_toolkit==3.0.51
 propcache==0.3.2
 proto-plus==1.26.1
-protobuf==5.29.5
+protobuf>=4.25.3,<5
 psutil==7.0.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
