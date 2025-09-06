@@ -1,6 +1,6 @@
 # Comic-Maker
 
-A pipeline for training **LoRA models** per character and using them to generate comic panels.
+A pipeline for training **LoRA models** per character and using them to generate images.
 
 ---
 
